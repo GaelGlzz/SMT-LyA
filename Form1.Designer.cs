@@ -179,9 +179,9 @@
             this.grpOperaciones.Controls.Add(this.radBuscarIgual);
             this.grpOperaciones.Controls.Add(this.txtSimbolo);
             this.grpOperaciones.Controls.Add(this.label3);
-            this.grpOperaciones.Location = new System.Drawing.Point(227, 12);
+            this.grpOperaciones.Location = new System.Drawing.Point(218, 12);
             this.grpOperaciones.Name = "grpOperaciones";
-            this.grpOperaciones.Size = new System.Drawing.Size(411, 363);
+            this.grpOperaciones.Size = new System.Drawing.Size(430, 363);
             this.grpOperaciones.TabIndex = 1;
             this.grpOperaciones.TabStop = false;
             this.grpOperaciones.Text = "Operaciones";

@@ -64,7 +64,6 @@ namespace SimuladorMaquinaTuring
         {
 
 
-
         }
 
         private void btnAIzquierda_Click(object sender, EventArgs e)
