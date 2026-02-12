@@ -16,7 +16,6 @@ namespace SimuladorMaquinaTuring
         char[] cadena;
         int cabezal;
         string blanco = "Δ";
-        string gael = "Gael";
         public void recorrerIzquierda()
         {
             int cabezalActual = dgMT.CurrentCell.ColumnIndex;
@@ -67,6 +66,11 @@ namespace SimuladorMaquinaTuring
         }
 
         private void btnAIzquierda_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBlanco_Click(object sender, EventArgs e)
         {
 
         }
