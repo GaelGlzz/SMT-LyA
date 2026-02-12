@@ -16,6 +16,7 @@ namespace SimuladorMaquinaTuring
         char[] cadena;
         int cabezal;
         string blanco = "Δ";
+        string valeval_mal="La cadena no es válida para el alfabeto definido.";
         public void recorrerIzquierda()
         {
             int cabezalActual = dgMT.CurrentCell.ColumnIndex;
