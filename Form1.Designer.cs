@@ -39,6 +39,8 @@
             this.txtAlfabeto = new System.Windows.Forms.TextBox();
             this.lblAlfabeto = new System.Windows.Forms.Label();
             this.grpOperaciones = new System.Windows.Forms.GroupBox();
+            this.radEliminarXHastaFinalCinta = new System.Windows.Forms.RadioButton();
+            this.radBuscarHastaFinal = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnOpDer = new System.Windows.Forms.Button();
@@ -64,8 +66,6 @@
             this.ritCompuesta = new System.Windows.Forms.RichTextBox();
             this.lblMTC = new System.Windows.Forms.Label();
             this.dgMT = new System.Windows.Forms.DataGridView();
-            this.radBuscarHastaFinal = new System.Windows.Forms.RadioButton();
-            this.radEliminarXHastaFinalCinta = new System.Windows.Forms.RadioButton();
             this.grpDatos.SuspendLayout();
             this.grpOperaciones.SuspendLayout();
             this.grpCadena.SuspendLayout();
@@ -84,11 +84,11 @@
             this.grpDatos.Controls.Add(this.lblCinta);
             this.grpDatos.Controls.Add(this.txtAlfabeto);
             this.grpDatos.Controls.Add(this.lblAlfabeto);
-            this.grpDatos.Location = new System.Drawing.Point(12, 12);
-            this.grpDatos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.grpDatos.Location = new System.Drawing.Point(9, 10);
+            this.grpDatos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.grpDatos.Name = "grpDatos";
-            this.grpDatos.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpDatos.Size = new System.Drawing.Size(200, 363);
+            this.grpDatos.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpDatos.Size = new System.Drawing.Size(150, 295);
             this.grpDatos.TabIndex = 0;
             this.grpDatos.TabStop = false;
             this.grpDatos.Text = "Datos";
@@ -96,10 +96,10 @@
             // btnIniciarMT
             // 
             this.btnIniciarMT.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnIniciarMT.Location = new System.Drawing.Point(5, 208);
-            this.btnIniciarMT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnIniciarMT.Location = new System.Drawing.Point(4, 169);
+            this.btnIniciarMT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnIniciarMT.Name = "btnIniciarMT";
-            this.btnIniciarMT.Size = new System.Drawing.Size(185, 149);
+            this.btnIniciarMT.Size = new System.Drawing.Size(139, 121);
             this.btnIniciarMT.TabIndex = 4;
             this.btnIniciarMT.Text = "Iniciar máquina de Turing";
             this.btnIniciarMT.UseVisualStyleBackColor = false;
@@ -107,37 +107,38 @@
             // 
             // txtCabezal
             // 
-            this.txtCabezal.Location = new System.Drawing.Point(69, 180);
-            this.txtCabezal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtCabezal.Location = new System.Drawing.Point(52, 146);
+            this.txtCabezal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtCabezal.Name = "txtCabezal";
-            this.txtCabezal.Size = new System.Drawing.Size(41, 22);
+            this.txtCabezal.Size = new System.Drawing.Size(32, 20);
             this.txtCabezal.TabIndex = 8;
             // 
             // lblCabezal
             // 
             this.lblCabezal.AutoSize = true;
-            this.lblCabezal.Location = new System.Drawing.Point(5, 183);
+            this.lblCabezal.Location = new System.Drawing.Point(4, 149);
+            this.lblCabezal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCabezal.Name = "lblCabezal";
-            this.lblCabezal.Size = new System.Drawing.Size(57, 16);
+            this.lblCabezal.Size = new System.Drawing.Size(45, 13);
             this.lblCabezal.TabIndex = 7;
             this.lblCabezal.Text = "Cabezal";
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(9, 146);
-            this.btnGuardar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGuardar.Location = new System.Drawing.Point(7, 119);
+            this.btnGuardar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(185, 23);
+            this.btnGuardar.Size = new System.Drawing.Size(139, 19);
             this.btnGuardar.TabIndex = 6;
             this.btnGuardar.Text = "Guardar datos";
             this.btnGuardar.UseVisualStyleBackColor = true;
             // 
             // btnBlanco
             // 
-            this.btnBlanco.Location = new System.Drawing.Point(9, 118);
-            this.btnBlanco.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnBlanco.Location = new System.Drawing.Point(7, 96);
+            this.btnBlanco.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnBlanco.Name = "btnBlanco";
-            this.btnBlanco.Size = new System.Drawing.Size(185, 23);
+            this.btnBlanco.Size = new System.Drawing.Size(139, 19);
             this.btnBlanco.TabIndex = 4;
             this.btnBlanco.Text = "Insertar Δ";
             this.btnBlanco.UseVisualStyleBackColor = true;
@@ -145,35 +146,37 @@
             // 
             // txtCinta
             // 
-            this.txtCinta.Location = new System.Drawing.Point(9, 89);
-            this.txtCinta.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtCinta.Location = new System.Drawing.Point(7, 72);
+            this.txtCinta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtCinta.Name = "txtCinta";
-            this.txtCinta.Size = new System.Drawing.Size(185, 22);
+            this.txtCinta.Size = new System.Drawing.Size(140, 20);
             this.txtCinta.TabIndex = 3;
             // 
             // lblCinta
             // 
             this.lblCinta.AutoSize = true;
-            this.lblCinta.Location = new System.Drawing.Point(5, 70);
+            this.lblCinta.Location = new System.Drawing.Point(4, 57);
+            this.lblCinta.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCinta.Name = "lblCinta";
-            this.lblCinta.Size = new System.Drawing.Size(123, 16);
+            this.lblCinta.Size = new System.Drawing.Size(98, 13);
             this.lblCinta.TabIndex = 2;
             this.lblCinta.Text = "Cadena de entrada";
             // 
             // txtAlfabeto
             // 
-            this.txtAlfabeto.Location = new System.Drawing.Point(69, 28);
-            this.txtAlfabeto.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtAlfabeto.Location = new System.Drawing.Point(52, 23);
+            this.txtAlfabeto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtAlfabeto.Name = "txtAlfabeto";
-            this.txtAlfabeto.Size = new System.Drawing.Size(124, 22);
+            this.txtAlfabeto.Size = new System.Drawing.Size(94, 20);
             this.txtAlfabeto.TabIndex = 1;
             // 
             // lblAlfabeto
             // 
             this.lblAlfabeto.AutoSize = true;
-            this.lblAlfabeto.Location = new System.Drawing.Point(5, 31);
+            this.lblAlfabeto.Location = new System.Drawing.Point(4, 25);
+            this.lblAlfabeto.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAlfabeto.Name = "lblAlfabeto";
-            this.lblAlfabeto.Size = new System.Drawing.Size(57, 16);
+            this.lblAlfabeto.Size = new System.Drawing.Size(46, 13);
             this.lblAlfabeto.TabIndex = 0;
             this.lblAlfabeto.Text = "Alfabeto";
             // 
@@ -193,39 +196,63 @@
             this.grpOperaciones.Controls.Add(this.radBuscarIgual);
             this.grpOperaciones.Controls.Add(this.txtSimbolo);
             this.grpOperaciones.Controls.Add(this.label3);
-            this.grpOperaciones.Location = new System.Drawing.Point(219, 12);
-            this.grpOperaciones.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.grpOperaciones.Location = new System.Drawing.Point(164, 10);
+            this.grpOperaciones.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.grpOperaciones.Name = "grpOperaciones";
-            this.grpOperaciones.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpOperaciones.Size = new System.Drawing.Size(429, 363);
+            this.grpOperaciones.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpOperaciones.Size = new System.Drawing.Size(322, 295);
             this.grpOperaciones.TabIndex = 1;
             this.grpOperaciones.TabStop = false;
             this.grpOperaciones.Text = "Operaciones";
             // 
+            // radEliminarXHastaFinalCinta
+            // 
+            this.radEliminarXHastaFinalCinta.AutoSize = true;
+            this.radEliminarXHastaFinalCinta.Location = new System.Drawing.Point(181, 110);
+            this.radEliminarXHastaFinalCinta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radEliminarXHastaFinalCinta.Name = "radEliminarXHastaFinalCinta";
+            this.radEliminarXHastaFinalCinta.Size = new System.Drawing.Size(133, 30);
+            this.radEliminarXHastaFinalCinta.TabIndex = 21;
+            this.radEliminarXHastaFinalCinta.Text = "Eliminar símbolo hasta \r\nel final de la cinta";
+            this.radEliminarXHastaFinalCinta.UseVisualStyleBackColor = true;
+            // 
+            // radBuscarHastaFinal
+            // 
+            this.radBuscarHastaFinal.AutoSize = true;
+            this.radBuscarHastaFinal.Location = new System.Drawing.Point(181, 72);
+            this.radBuscarHastaFinal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radBuscarHastaFinal.Name = "radBuscarHastaFinal";
+            this.radBuscarHastaFinal.Size = new System.Drawing.Size(130, 30);
+            this.radBuscarHastaFinal.TabIndex = 20;
+            this.radBuscarHastaFinal.Text = "Buscar símbolo hasta \r\nel final de la cinta";
+            this.radBuscarHastaFinal.UseVisualStyleBackColor = true;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(115, 293);
+            this.label4.Location = new System.Drawing.Point(86, 238);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 16);
+            this.label4.Size = new System.Drawing.Size(24, 13);
             this.label4.TabIndex = 19;
             this.label4.Text = "Der";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(48, 293);
+            this.label5.Location = new System.Drawing.Point(36, 238);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(24, 16);
+            this.label5.Size = new System.Drawing.Size(21, 13);
             this.label5.TabIndex = 18;
             this.label5.Text = "Izq";
             // 
             // btnOpDer
             // 
-            this.btnOpDer.Location = new System.Drawing.Point(104, 247);
-            this.btnOpDer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnOpDer.Location = new System.Drawing.Point(78, 201);
+            this.btnOpDer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnOpDer.Name = "btnOpDer";
-            this.btnOpDer.Size = new System.Drawing.Size(53, 43);
+            this.btnOpDer.Size = new System.Drawing.Size(40, 35);
             this.btnOpDer.TabIndex = 17;
             this.btnOpDer.Text = "→";
             this.btnOpDer.UseVisualStyleBackColor = true;
@@ -233,10 +260,10 @@
             // 
             // btnOpIzq
             // 
-            this.btnOpIzq.Location = new System.Drawing.Point(35, 247);
-            this.btnOpIzq.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnOpIzq.Location = new System.Drawing.Point(26, 201);
+            this.btnOpIzq.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnOpIzq.Name = "btnOpIzq";
-            this.btnOpIzq.Size = new System.Drawing.Size(53, 43);
+            this.btnOpIzq.Size = new System.Drawing.Size(40, 35);
             this.btnOpIzq.TabIndex = 16;
             this.btnOpIzq.Text = "←";
             this.btnOpIzq.UseVisualStyleBackColor = true;
@@ -245,10 +272,10 @@
             // radEliminarHastaEncontrar
             // 
             this.radEliminarHastaEncontrar.AutoSize = true;
-            this.radEliminarHastaEncontrar.Location = new System.Drawing.Point(19, 222);
-            this.radEliminarHastaEncontrar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radEliminarHastaEncontrar.Location = new System.Drawing.Point(14, 180);
+            this.radEliminarHastaEncontrar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radEliminarHastaEncontrar.Name = "radEliminarHastaEncontrar";
-            this.radEliminarHastaEncontrar.Size = new System.Drawing.Size(177, 20);
+            this.radEliminarHastaEncontrar.Size = new System.Drawing.Size(141, 17);
             this.radEliminarHastaEncontrar.TabIndex = 14;
             this.radEliminarHastaEncontrar.Text = "Eliminar hasta el símbolo";
             this.radEliminarHastaEncontrar.UseVisualStyleBackColor = true;
@@ -256,10 +283,10 @@
             // radEliminarDif
             // 
             this.radEliminarDif.AutoSize = true;
-            this.radEliminarDif.Location = new System.Drawing.Point(19, 194);
-            this.radEliminarDif.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radEliminarDif.Location = new System.Drawing.Point(14, 158);
+            this.radEliminarDif.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radEliminarDif.Name = "radEliminarDif";
-            this.radEliminarDif.Size = new System.Drawing.Size(138, 20);
+            this.radEliminarDif.Size = new System.Drawing.Size(110, 17);
             this.radEliminarDif.TabIndex = 13;
             this.radEliminarDif.Text = "Eliminar diferentes";
             this.radEliminarDif.UseVisualStyleBackColor = true;
@@ -267,10 +294,10 @@
             // radBuscarDif
             // 
             this.radBuscarDif.AutoSize = true;
-            this.radBuscarDif.Location = new System.Drawing.Point(19, 169);
-            this.radBuscarDif.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radBuscarDif.Location = new System.Drawing.Point(14, 137);
+            this.radBuscarDif.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radBuscarDif.Name = "radBuscarDif";
-            this.radBuscarDif.Size = new System.Drawing.Size(132, 20);
+            this.radBuscarDif.Size = new System.Drawing.Size(107, 17);
             this.radBuscarDif.TabIndex = 12;
             this.radBuscarDif.Text = "Buscar diferentes";
             this.radBuscarDif.UseVisualStyleBackColor = true;
@@ -278,10 +305,10 @@
             // radEscribirPosAct
             // 
             this.radEscribirPosAct.AutoSize = true;
-            this.radEscribirPosAct.Location = new System.Drawing.Point(19, 143);
-            this.radEscribirPosAct.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radEscribirPosAct.Location = new System.Drawing.Point(14, 116);
+            this.radEscribirPosAct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radEscribirPosAct.Name = "radEscribirPosAct";
-            this.radEscribirPosAct.Size = new System.Drawing.Size(184, 20);
+            this.radEscribirPosAct.Size = new System.Drawing.Size(148, 17);
             this.radEscribirPosAct.TabIndex = 11;
             this.radEscribirPosAct.Text = "Escribir en posición actual";
             this.radEscribirPosAct.UseVisualStyleBackColor = true;
@@ -289,10 +316,10 @@
             // radEliminarIgual
             // 
             this.radEliminarIgual.AutoSize = true;
-            this.radEliminarIgual.Location = new System.Drawing.Point(19, 117);
-            this.radEliminarIgual.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radEliminarIgual.Location = new System.Drawing.Point(14, 95);
+            this.radEliminarIgual.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radEliminarIgual.Name = "radEliminarIgual";
-            this.radEliminarIgual.Size = new System.Drawing.Size(159, 20);
+            this.radEliminarIgual.Size = new System.Drawing.Size(126, 17);
             this.radEliminarIgual.TabIndex = 9;
             this.radEliminarIgual.Text = "Eliminar símbolo igual";
             this.radEliminarIgual.UseVisualStyleBackColor = true;
@@ -300,28 +327,29 @@
             // radBuscarIgual
             // 
             this.radBuscarIgual.AutoSize = true;
-            this.radBuscarIgual.Location = new System.Drawing.Point(19, 91);
-            this.radBuscarIgual.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radBuscarIgual.Location = new System.Drawing.Point(14, 74);
+            this.radBuscarIgual.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radBuscarIgual.Name = "radBuscarIgual";
-            this.radBuscarIgual.Size = new System.Drawing.Size(121, 20);
+            this.radBuscarIgual.Size = new System.Drawing.Size(98, 17);
             this.radBuscarIgual.TabIndex = 8;
             this.radBuscarIgual.Text = "Buscar símbolo";
             this.radBuscarIgual.UseVisualStyleBackColor = true;
             // 
             // txtSimbolo
             // 
-            this.txtSimbolo.Location = new System.Drawing.Point(19, 50);
-            this.txtSimbolo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtSimbolo.Location = new System.Drawing.Point(14, 41);
+            this.txtSimbolo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtSimbolo.Name = "txtSimbolo";
-            this.txtSimbolo.Size = new System.Drawing.Size(100, 22);
+            this.txtSimbolo.Size = new System.Drawing.Size(76, 20);
             this.txtSimbolo.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 31);
+            this.label3.Location = new System.Drawing.Point(12, 25);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(57, 16);
+            this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Símbolo";
             // 
@@ -335,11 +363,11 @@
             this.grpCadena.Controls.Add(this.btnCadBlanco);
             this.grpCadena.Controls.Add(this.txtBuscarCadena);
             this.grpCadena.Controls.Add(this.lblBuscar);
-            this.grpCadena.Location = new System.Drawing.Point(653, 12);
-            this.grpCadena.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.grpCadena.Location = new System.Drawing.Point(490, 10);
+            this.grpCadena.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.grpCadena.Name = "grpCadena";
-            this.grpCadena.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpCadena.Size = new System.Drawing.Size(200, 363);
+            this.grpCadena.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpCadena.Size = new System.Drawing.Size(150, 295);
             this.grpCadena.TabIndex = 2;
             this.grpCadena.TabStop = false;
             this.grpCadena.Text = "Cadena";
@@ -347,37 +375,40 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(140, 164);
+            this.label2.Location = new System.Drawing.Point(105, 133);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 16);
+            this.label2.Size = new System.Drawing.Size(24, 13);
             this.label2.TabIndex = 14;
             this.label2.Text = "Der";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 164);
+            this.label1.Location = new System.Drawing.Point(21, 133);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(24, 16);
+            this.label1.Size = new System.Drawing.Size(21, 13);
             this.label1.TabIndex = 13;
             this.label1.Text = "Izq";
             // 
             // btnADerecha
             // 
-            this.btnADerecha.Location = new System.Drawing.Point(129, 118);
-            this.btnADerecha.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnADerecha.Location = new System.Drawing.Point(97, 96);
+            this.btnADerecha.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnADerecha.Name = "btnADerecha";
-            this.btnADerecha.Size = new System.Drawing.Size(53, 43);
+            this.btnADerecha.Size = new System.Drawing.Size(40, 35);
             this.btnADerecha.TabIndex = 12;
             this.btnADerecha.Text = "→";
             this.btnADerecha.UseVisualStyleBackColor = true;
+            this.btnADerecha.Click += new System.EventHandler(this.btnADerecha_Click);
             // 
             // btnAIzquierda
             // 
-            this.btnAIzquierda.Location = new System.Drawing.Point(15, 118);
-            this.btnAIzquierda.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnAIzquierda.Location = new System.Drawing.Point(11, 96);
+            this.btnAIzquierda.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAIzquierda.Name = "btnAIzquierda";
-            this.btnAIzquierda.Size = new System.Drawing.Size(53, 43);
+            this.btnAIzquierda.Size = new System.Drawing.Size(40, 35);
             this.btnAIzquierda.TabIndex = 11;
             this.btnAIzquierda.Text = "←";
             this.btnAIzquierda.UseVisualStyleBackColor = true;
@@ -386,36 +417,39 @@
             // lblBuscarBt
             // 
             this.lblBuscarBt.AutoSize = true;
-            this.lblBuscarBt.Location = new System.Drawing.Point(75, 130);
+            this.lblBuscarBt.Location = new System.Drawing.Point(56, 106);
+            this.lblBuscarBt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblBuscarBt.Name = "lblBuscarBt";
-            this.lblBuscarBt.Size = new System.Drawing.Size(49, 16);
+            this.lblBuscarBt.Size = new System.Drawing.Size(40, 13);
             this.lblBuscarBt.TabIndex = 10;
             this.lblBuscarBt.Text = "Buscar";
             // 
             // btnCadBlanco
             // 
-            this.btnCadBlanco.Location = new System.Drawing.Point(19, 76);
-            this.btnCadBlanco.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCadBlanco.Location = new System.Drawing.Point(14, 62);
+            this.btnCadBlanco.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCadBlanco.Name = "btnCadBlanco";
-            this.btnCadBlanco.Size = new System.Drawing.Size(164, 23);
+            this.btnCadBlanco.Size = new System.Drawing.Size(123, 19);
             this.btnCadBlanco.TabIndex = 9;
             this.btnCadBlanco.Text = "Insertar Δ";
             this.btnCadBlanco.UseVisualStyleBackColor = true;
+            this.btnCadBlanco.Click += new System.EventHandler(this.btnCadBlanco_Click);
             // 
             // txtBuscarCadena
             // 
-            this.txtBuscarCadena.Location = new System.Drawing.Point(19, 48);
-            this.txtBuscarCadena.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtBuscarCadena.Location = new System.Drawing.Point(14, 39);
+            this.txtBuscarCadena.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtBuscarCadena.Name = "txtBuscarCadena";
-            this.txtBuscarCadena.Size = new System.Drawing.Size(164, 22);
+            this.txtBuscarCadena.Size = new System.Drawing.Size(124, 20);
             this.txtBuscarCadena.TabIndex = 1;
             // 
             // lblBuscar
             // 
             this.lblBuscar.AutoSize = true;
-            this.lblBuscar.Location = new System.Drawing.Point(15, 28);
+            this.lblBuscar.Location = new System.Drawing.Point(11, 23);
+            this.lblBuscar.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblBuscar.Name = "lblBuscar";
-            this.lblBuscar.Size = new System.Drawing.Size(98, 16);
+            this.lblBuscar.Size = new System.Drawing.Size(79, 13);
             this.lblBuscar.TabIndex = 0;
             this.lblBuscar.Text = "Buscar cadena";
             // 
@@ -424,30 +458,31 @@
             this.grpMaquina.Controls.Add(this.ritCompuesta);
             this.grpMaquina.Controls.Add(this.lblMTC);
             this.grpMaquina.Controls.Add(this.dgMT);
-            this.grpMaquina.Location = new System.Drawing.Point(12, 382);
-            this.grpMaquina.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.grpMaquina.Location = new System.Drawing.Point(9, 310);
+            this.grpMaquina.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.grpMaquina.Name = "grpMaquina";
-            this.grpMaquina.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpMaquina.Size = new System.Drawing.Size(843, 208);
+            this.grpMaquina.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpMaquina.Size = new System.Drawing.Size(632, 169);
             this.grpMaquina.TabIndex = 3;
             this.grpMaquina.TabStop = false;
             this.grpMaquina.Text = "Cinta de la Máquina de Turing";
             // 
             // ritCompuesta
             // 
-            this.ritCompuesta.Location = new System.Drawing.Point(9, 139);
-            this.ritCompuesta.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.ritCompuesta.Location = new System.Drawing.Point(7, 113);
+            this.ritCompuesta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ritCompuesta.Name = "ritCompuesta";
-            this.ritCompuesta.Size = new System.Drawing.Size(815, 53);
+            this.ritCompuesta.Size = new System.Drawing.Size(612, 44);
             this.ritCompuesta.TabIndex = 2;
             this.ritCompuesta.Text = "";
             // 
             // lblMTC
             // 
             this.lblMTC.AutoSize = true;
-            this.lblMTC.Location = new System.Drawing.Point(6, 121);
+            this.lblMTC.Location = new System.Drawing.Point(4, 98);
+            this.lblMTC.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblMTC.Name = "lblMTC";
-            this.lblMTC.Size = new System.Drawing.Size(224, 16);
+            this.lblMTC.Size = new System.Drawing.Size(178, 13);
             this.lblMTC.TabIndex = 1;
             this.lblMTC.Text = "Compuesta de la Maquina de Turing";
             // 
@@ -456,50 +491,28 @@
             this.dgMT.AllowUserToAddRows = false;
             this.dgMT.AllowUserToDeleteRows = false;
             this.dgMT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgMT.Location = new System.Drawing.Point(9, 21);
-            this.dgMT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgMT.Location = new System.Drawing.Point(7, 17);
+            this.dgMT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgMT.Name = "dgMT";
             this.dgMT.ReadOnly = true;
             this.dgMT.RowHeadersVisible = false;
             this.dgMT.RowHeadersWidth = 51;
             this.dgMT.RowTemplate.Height = 24;
             this.dgMT.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgMT.Size = new System.Drawing.Size(815, 88);
+            this.dgMT.Size = new System.Drawing.Size(611, 72);
             this.dgMT.TabIndex = 3;
             this.dgMT.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMT_CellContentClick);
             // 
-            // radBuscarHastaFinal
-            // 
-            this.radBuscarHastaFinal.AutoSize = true;
-            this.radBuscarHastaFinal.Location = new System.Drawing.Point(241, 89);
-            this.radBuscarHastaFinal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.radBuscarHastaFinal.Name = "radBuscarHastaFinal";
-            this.radBuscarHastaFinal.Size = new System.Drawing.Size(160, 36);
-            this.radBuscarHastaFinal.TabIndex = 20;
-            this.radBuscarHastaFinal.Text = "Buscar símbolo hasta \r\nel final de la cinta";
-            this.radBuscarHastaFinal.UseVisualStyleBackColor = true;
-            // 
-            // radEliminarXHastaFinalCinta
-            // 
-            this.radEliminarXHastaFinalCinta.AutoSize = true;
-            this.radEliminarXHastaFinalCinta.Location = new System.Drawing.Point(241, 135);
-            this.radEliminarXHastaFinalCinta.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.radEliminarXHastaFinalCinta.Name = "radEliminarXHastaFinalCinta";
-            this.radEliminarXHastaFinalCinta.Size = new System.Drawing.Size(166, 36);
-            this.radEliminarXHastaFinalCinta.TabIndex = 21;
-            this.radEliminarXHastaFinalCinta.Text = "Eliminar símbolo hasta \r\nel final de la cinta";
-            this.radEliminarXHastaFinalCinta.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(876, 601);
+            this.ClientSize = new System.Drawing.Size(657, 488);
             this.Controls.Add(this.grpMaquina);
             this.Controls.Add(this.grpCadena);
             this.Controls.Add(this.grpOperaciones);
             this.Controls.Add(this.grpDatos);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "SimuladorMT";
             this.Load += new System.EventHandler(this.Form1_Load);

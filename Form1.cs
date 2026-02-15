@@ -732,11 +732,7 @@ namespace SimuladorMaquinaTuring
             }
         }
 
-        private void btnAIzquierda_Click(object sender, EventArgs e)
-        {
-            btnOpIzq_Click(sender, e);
-        }
-
+        //insertar blanco en la cinta
         private void btnBlanco_Click(object sender, EventArgs e)
         {
             string texto = txtCinta.Text;
@@ -758,5 +754,110 @@ namespace SimuladorMaquinaTuring
         {
 
         }
+
+        private async void btnAIzquierda_Click(object sender, EventArgs e)
+        {
+            await BuscarCadenaCompleta(false);
+        }
+        private async void btnADerecha_Click(object sender, EventArgs e)
+        {
+            await BuscarCadenaCompleta(true);
+        }
+
+        //insertar blanco en buscar cinta
+        private void btnCadBlanco_Click(object sender, EventArgs e)
+        {
+            string texto = txtBuscarCadena.Text;
+            int posicion = txtBuscarCadena.SelectionStart;
+
+            if (posicion < 0)
+                posicion = 0;
+
+            if (posicion > texto.Length)
+                posicion = texto.Length;
+
+            texto = texto.Insert(posicion, "Δ");
+            txtBuscarCadena.Text = texto;
+
+            txtBuscarCadena.SelectionStart = posicion + 1;
+        }
+        //metodo para buscar la cadena 
+        private async Task BuscarCadenaCompleta(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtBuscarCadena.Text))
+            {
+                MessageBox.Show("Ingrese una cadena a buscar.");
+                return;
+            }
+
+            string cadenaBuscar = txtBuscarCadena.Text;
+            bool encontrada = false;
+
+            if (derecha)
+            {
+                for (int i = cabezal; i <= cadena.Length - cadenaBuscar.Length; i++)
+                {
+                    moverDerecha();
+                    ritCompuesta.Text += "D->";
+                    await Task.Delay(400);
+
+                    bool coincide = true;
+
+                    for (int j = 0; j < cadenaBuscar.Length; j++)
+                    {
+                        if (cadena[i + j] != cadenaBuscar[j])
+                        {
+                            coincide = false;
+                            break;
+                        }
+                    }
+
+                    if (coincide)
+                    {
+                        cabezal = i;
+                        ActualizarCinta();
+                        encontrada = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = cabezal; i >= 0; i--)
+                {
+                    moverIzquierda();
+                    ritCompuesta.Text += "I->";
+                    await Task.Delay(400);
+
+                    if (i - cadenaBuscar.Length + 1 < 0)
+                        continue;
+
+                    bool coincide = true;
+
+                    for (int j = 0; j < cadenaBuscar.Length; j++)
+                    {
+                        if (cadena[i - cadenaBuscar.Length + 1 + j] != cadenaBuscar[j])
+                        {
+                            coincide = false;
+                            break;
+                        }
+                    }
+
+                    if (coincide)
+                    {
+                        cabezal = i - cadenaBuscar.Length + 1;
+                        ActualizarCinta();
+                        encontrada = true;
+                        break;
+                    }
+                }
+            }
+
+            if (encontrada)
+                MessageBox.Show($"Cadena \"{cadenaBuscar}\" encontrada en posición {cabezal}");
+            else
+                MessageBox.Show($"Cadena \"{cadenaBuscar}\" no encontrada");
+        }
+
     }
 }
