@@ -35,8 +35,98 @@ namespace SimuladorMaquinaTuring
             txtSimbolo.KeyPress += txtSimbolo_KeyPress;
 
             dgMT.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            // Configurar para evitar selección del usuario
+            dgMT.ReadOnly = true;
+            dgMT.AllowUserToAddRows = false;
+            dgMT.AllowUserToDeleteRows = false;
+            dgMT.MultiSelect = false;
+            dgMT.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgMT.StandardTab = false;
+
+            // Evitar que el usuario cambie la selección
+            dgMT.SelectionChanged += dgMT_SelectionChanged;
+            dgMT.KeyDown += dgMT_KeyDown;
+
+            // Agregar eventos para los RadioButtons
+            radBuscarIgual.CheckedChanged += RadioButton_CheckedChanged;
+            radEliminarIgual.CheckedChanged += RadioButton_CheckedChanged;
+            radEscribirPosAct.CheckedChanged += RadioButton_CheckedChanged;
+            radBuscarDif.CheckedChanged += RadioButton_CheckedChanged;
+            radEliminarDif.CheckedChanged += RadioButton_CheckedChanged;
+            radEliminarHastaEncontrar.CheckedChanged += RadioButton_CheckedChanged;
+
+            // Estado inicial de los botones
+            ActualizarEstadoBotones();
         }
 
+        private void RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ActualizarEstadoBotones();
+        }
+
+        private void ActualizarEstadoBotones()
+        {
+            if (radEscribirPosAct.Checked)
+            {
+                // Si está seleccionado "Escribir en posición actual"
+                btnOpIzq.Enabled = false;
+                btnOpDer.Enabled = false;
+                btnEscribir.Enabled = true;
+            }
+            else
+            {
+                // Para cualquier otra opción
+                btnOpIzq.Enabled = true;
+                btnOpDer.Enabled = true;
+                btnEscribir.Enabled = false;
+            }
+        }
+
+        private void dgMT_SelectionChanged(object sender, EventArgs e)
+        {
+            // Si el usuario intenta cambiar la selección, regresarla al cabezal
+            if (dgMT.Rows.Count > 0 && cabezal >= 0 && cabezal < dgMT.Columns.Count)
+            {
+                if (dgMT.CurrentCell == null || dgMT.CurrentCell.ColumnIndex != cabezal)
+                {
+                    dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+                }
+            }
+        }
+
+        private void dgMT_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Bloquear navegación con flechas del teclado
+            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right ||
+                e.KeyCode == Keys.Up || e.KeyCode == Keys.Down ||
+                e.KeyCode == Keys.Tab || e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void AgregarMovimiento(string direccion, string simbolo = "")
+        {
+            // Si hay dirección, agregarla en tamaño normal
+            if (!string.IsNullOrEmpty(direccion))
+            {
+                ritCompuesta.SelectionFont = new Font(ritCompuesta.Font.FontFamily, ritCompuesta.Font.Size, ritCompuesta.Font.Style);
+                ritCompuesta.AppendText(direccion);
+            }
+
+            // Si hay símbolo, agregarlo en tamaño más pequeño (simulando subíndice)
+            if (!string.IsNullOrEmpty(simbolo))
+            {
+                ritCompuesta.SelectionFont = new Font(ritCompuesta.Font.FontFamily, ritCompuesta.Font.Size - 3, ritCompuesta.Font.Style);
+                ritCompuesta.AppendText(simbolo);
+            }
+
+            // Restaurar tamaño normal para la flecha
+            ritCompuesta.SelectionFont = new Font(ritCompuesta.Font.FontFamily, ritCompuesta.Font.Size, ritCompuesta.Font.Style);
+            ritCompuesta.AppendText("->");
+        }
 
         private bool EsCaracterValido(char c)
         {
@@ -345,6 +435,12 @@ namespace SimuladorMaquinaTuring
                     break;
                 }
             }
+            //Solo permitir un carácter
+            if (txtSimbolo.Text.Length >= 1)
+            {
+                e.Handled = true;
+                return;
+            }
 
             // Si el carácter no está en la cadena, rechazarlo
             if (!caracterEnCadena)
@@ -380,6 +476,41 @@ namespace SimuladorMaquinaTuring
             await EjecutarOperacion(true);
         }
 
+        // Nuevo botón para escribir
+        private async void btnEscribir_Click(object sender, EventArgs e)
+        {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            await EscribirEnPosicionActual();
+        }
+
+        private async Task EscribirEnPosicionActual()
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a escribir.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+            cadena[cabezal] = simb;
+            dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+            // Agregar el símbolo escrito (sin dirección, solo símbolo)
+            AgregarMovimiento("", simb.ToString());
+
+            await Task.Delay(500);
+
+            MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private async Task EjecutarOperacion(bool derecha)
         {
             if (radBuscarIgual.Checked)
@@ -389,10 +520,6 @@ namespace SimuladorMaquinaTuring
             else if (radEliminarIgual.Checked)
             {
                 await EliminarIgual(derecha);
-            }
-            else if (radEscribirPosAct.Checked)
-            {
-                await EscribirPosicionActual(derecha);
             }
             else if (radBuscarDif.Checked)
             {
@@ -422,10 +549,11 @@ namespace SimuladorMaquinaTuring
 
             if (derecha)
             {
+                AgregarMovimiento("D", cadena[cabezal].ToString());
                 for (int i = cabezal + 1; i < cadena.Length; i++)
                 {
                     moverDerecha();
-                    ritCompuesta.Text += "D->";
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
                     await Task.Delay(500);
 
                     if (cadena[cabezal] == simb)
@@ -437,10 +565,11 @@ namespace SimuladorMaquinaTuring
             }
             else
             {
+                AgregarMovimiento("I", cadena[cabezal].ToString());
                 for (int i = cabezal - 1; i >= 0; i--)
                 {
                     moverIzquierda();
-                    ritCompuesta.Text += "I->";
+                    AgregarMovimiento("I", cadena[cabezal].ToString());
                     await Task.Delay(500);
 
                     if (cadena[cabezal] == simb)
@@ -482,15 +611,19 @@ namespace SimuladorMaquinaTuring
                 while (cabezal < dgMT.Columns.Count - 1)
                 {
                     moverDerecha();
-                    ritCompuesta.Text += "D->";
-                    await Task.Delay(500);
 
+                    // Verificar si se debe eliminar ANTES de agregar a la compuesta
+                    string simboloMostrar = cadena[cabezal].ToString();
                     if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
                     {
                         cont++;
                         dgMT.CurrentCell.Value = blanco;
-                        ritCompuesta.Text += blanco + "->";
+                        cadena[cabezal] = blanco[0];
+                        simboloMostrar = blanco;
                     }
+
+                    AgregarMovimiento("D", simboloMostrar);
+                    await Task.Delay(500);
                 }
                 MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) '{simb}'" : "No se eliminó ningún símbolo");
             }
@@ -499,15 +632,19 @@ namespace SimuladorMaquinaTuring
                 while (cabezal > 0)
                 {
                     moverIzquierda();
-                    ritCompuesta.Text += "I->";
-                    await Task.Delay(500);
 
+                    // Verificar si se debe eliminar ANTES de agregar a la compuesta
+                    string simboloMostrar = cadena[cabezal].ToString();
                     if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
                     {
                         cont++;
                         dgMT.CurrentCell.Value = blanco;
-                        ritCompuesta.Text += blanco + "->";
+                        cadena[cabezal] = blanco[0];
+                        simboloMostrar = blanco;
                     }
+
+                    AgregarMovimiento("I", simboloMostrar);
+                    await Task.Delay(500);
                 }
 
                 // Verificar la primera posición
@@ -515,41 +652,11 @@ namespace SimuladorMaquinaTuring
                 {
                     cont++;
                     dgMT.CurrentCell.Value = blanco;
-                    ritCompuesta.Text += blanco + "->";
+                    cadena[cabezal] = blanco[0];
                 }
 
                 MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) '{simb}'" : "No se eliminó ningún símbolo");
             }
-        }
-
-        private async Task EscribirPosicionActual(bool derecha)
-        {
-            if (string.IsNullOrEmpty(txtSimbolo.Text))
-            {
-                MessageBox.Show("Por favor, ingrese un símbolo a escribir.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            char simb = txtSimbolo.Text[0];
-            cadena[cabezal] = simb;
-            dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
-            ritCompuesta.Text += simb + "->";
-
-            await Task.Delay(500);
-
-            if (derecha)
-            {
-                moverDerecha();
-                ritCompuesta.Text += "D->";
-            }
-            else
-            {
-                moverIzquierda();
-                ritCompuesta.Text += "I->";
-            }
-
-            MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}");
         }
 
         private async Task BuscarDiferente(bool derecha)
@@ -569,7 +676,7 @@ namespace SimuladorMaquinaTuring
                 while (cabezal < dgMT.Columns.Count - 1)
                 {
                     moverDerecha();
-                    ritCompuesta.Text += "D->";
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
                     await Task.Delay(500);
 
                     if (cadena[cabezal] != simb)
@@ -584,7 +691,7 @@ namespace SimuladorMaquinaTuring
                 while (cabezal > 0)
                 {
                     moverIzquierda();
-                    ritCompuesta.Text += "I->";
+                    AgregarMovimiento("I", cadena[cabezal].ToString());
                     await Task.Delay(500);
 
                     if (cadena[cabezal] != simb)
@@ -632,15 +739,19 @@ namespace SimuladorMaquinaTuring
                 while (cabezal < dgMT.Columns.Count - 1)
                 {
                     moverDerecha();
-                    ritCompuesta.Text += "D->";
-                    await Task.Delay(500);
 
+                    // Verificar si se debe eliminar ANTES de agregar a la compuesta
+                    string simboloMostrar = cadena[cabezal].ToString();
                     if (dgMT.CurrentCell.Value.ToString() != simb.ToString())
                     {
                         dgMT.CurrentCell.Value = blanco;
+                        cadena[cabezal] = blanco[0];
                         cont++;
-                        ritCompuesta.Text += blanco + "->";
+                        simboloMostrar = blanco;
                     }
+
+                    AgregarMovimiento("D", simboloMostrar);
+                    await Task.Delay(500);
                 }
                 MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) diferente(s) a '{simb}'" : "No se eliminó ningún símbolo");
             }
@@ -649,23 +760,27 @@ namespace SimuladorMaquinaTuring
                 while (cabezal > 0)
                 {
                     moverIzquierda();
-                    ritCompuesta.Text += "I->";
-                    await Task.Delay(500);
 
+                    // Verificar si se debe eliminar ANTES de agregar a la compuesta
+                    string simboloMostrar = cadena[cabezal].ToString();
                     if (dgMT.CurrentCell.Value.ToString() != simb.ToString())
                     {
                         dgMT.CurrentCell.Value = blanco;
+                        cadena[cabezal] = blanco[0];
                         cont++;
-                        ritCompuesta.Text += blanco + "->";
+                        simboloMostrar = blanco;
                     }
+
+                    AgregarMovimiento("I", simboloMostrar);
+                    await Task.Delay(500);
                 }
 
                 // Verificar la primera posición
                 if (dgMT.CurrentCell.Value.ToString() != simb.ToString())
                 {
                     dgMT.CurrentCell.Value = blanco;
+                    cadena[cabezal] = blanco[0];
                     cont++;
-                    ritCompuesta.Text += blanco + "->";
                 }
 
                 MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) diferente(s) a '{simb}'" : "No se eliminó ningún símbolo");
@@ -688,17 +803,19 @@ namespace SimuladorMaquinaTuring
                 while (cabezal < dgMT.Columns.Count - 1)
                 {
                     moverDerecha();
-                    ritCompuesta.Text += "D->";
-                    await Task.Delay(500);
 
                     if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
                     {
+                        AgregarMovimiento("D", cadena[cabezal].ToString());
+                        await Task.Delay(500);
                         MessageBox.Show($"Se eliminaron todos los símbolos hasta encontrar '{simb}' en la posición {cabezal}");
                         return;
                     }
 
                     dgMT.CurrentCell.Value = blanco;
-                    ritCompuesta.Text += blanco + "->";
+                    cadena[cabezal] = blanco[0];
+                    AgregarMovimiento("D", blanco);
+                    await Task.Delay(500);
                 }
 
                 MessageBox.Show($"Símbolo '{simb}' no encontrado");
@@ -708,17 +825,19 @@ namespace SimuladorMaquinaTuring
                 while (cabezal > 0)
                 {
                     moverIzquierda();
-                    ritCompuesta.Text += "I->";
-                    await Task.Delay(500);
 
                     if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
                     {
+                        AgregarMovimiento("I", cadena[cabezal].ToString());
+                        await Task.Delay(500);
                         MessageBox.Show($"Se eliminaron todos los símbolos hasta encontrar '{simb}' en la posición {cabezal}");
                         return;
                     }
 
                     dgMT.CurrentCell.Value = blanco;
-                    ritCompuesta.Text += blanco + "->";
+                    cadena[cabezal] = blanco[0];
+                    AgregarMovimiento("I", blanco);
+                    await Task.Delay(500);
                 }
 
                 // Verificar la primera posición
@@ -748,17 +867,21 @@ namespace SimuladorMaquinaTuring
             txtCinta.Text = texto;
 
             txtCinta.SelectionStart = posicion + 1;
+            txtCinta.Focus();
+            txtCinta.SelectionLength = 0;
         }
 
         private void dgMT_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
-        // buacar patron
+
+        // buscar patron
         private async void btnAIzquierda_Click(object sender, EventArgs e)
         {
             await BuscarCadenaCompleta(false);
         }
+
         private async void btnADerecha_Click(object sender, EventArgs e)
         {
             await BuscarCadenaCompleta(true);
@@ -781,6 +904,7 @@ namespace SimuladorMaquinaTuring
 
             txtBuscarCadena.SelectionStart = posicion + 1;
         }
+
         //metodo para buscar la cadena 
         private async Task BuscarCadenaCompleta(bool derecha)
         {
@@ -804,7 +928,7 @@ namespace SimuladorMaquinaTuring
                 for (int i = cabezal; i <= cadena.Length - patron.Length; i++)
                 {
                     moverDerecha();
-                    ritCompuesta.Text += "D->";
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
                     await Task.Delay(400);
 
                     bool coincide = true;
@@ -837,7 +961,7 @@ namespace SimuladorMaquinaTuring
                 while (posicionActual >= 0)
                 {
                     moverIzquierda();
-                    ritCompuesta.Text += "I->";
+                    AgregarMovimiento("I", cadena[cabezal].ToString());
                     await Task.Delay(400);
 
                     if (cadena[posicionActual] == patronInvertido[indicePatron])
@@ -869,5 +993,16 @@ namespace SimuladorMaquinaTuring
                 MessageBox.Show($"Cadena \"{patron}\" no encontrada");
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            txtSimbolo.Text = "Δ";  
+            txtSimbolo.Focus();
+            txtSimbolo.SelectionStart = 1;
+        }
+
+        private void txtSimbolo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

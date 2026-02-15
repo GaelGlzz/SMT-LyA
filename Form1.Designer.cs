@@ -39,6 +39,8 @@
             this.txtAlfabeto = new System.Windows.Forms.TextBox();
             this.lblAlfabeto = new System.Windows.Forms.Label();
             this.grpOperaciones = new System.Windows.Forms.GroupBox();
+            this.btnSimbolo = new System.Windows.Forms.Button();
+            this.btnEscribir = new System.Windows.Forms.Button();
             this.radEliminarXHastaFinalCinta = new System.Windows.Forms.RadioButton();
             this.radBuscarHastaFinal = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
@@ -85,9 +87,9 @@
             this.grpDatos.Controls.Add(this.txtAlfabeto);
             this.grpDatos.Controls.Add(this.lblAlfabeto);
             this.grpDatos.Location = new System.Drawing.Point(9, 10);
-            this.grpDatos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpDatos.Margin = new System.Windows.Forms.Padding(2);
             this.grpDatos.Name = "grpDatos";
-            this.grpDatos.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpDatos.Padding = new System.Windows.Forms.Padding(2);
             this.grpDatos.Size = new System.Drawing.Size(150, 295);
             this.grpDatos.TabIndex = 0;
             this.grpDatos.TabStop = false;
@@ -97,7 +99,7 @@
             // 
             this.btnIniciarMT.BackColor = System.Drawing.Color.OrangeRed;
             this.btnIniciarMT.Location = new System.Drawing.Point(4, 169);
-            this.btnIniciarMT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnIniciarMT.Margin = new System.Windows.Forms.Padding(2);
             this.btnIniciarMT.Name = "btnIniciarMT";
             this.btnIniciarMT.Size = new System.Drawing.Size(139, 121);
             this.btnIniciarMT.TabIndex = 4;
@@ -108,7 +110,7 @@
             // txtCabezal
             // 
             this.txtCabezal.Location = new System.Drawing.Point(52, 146);
-            this.txtCabezal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCabezal.Margin = new System.Windows.Forms.Padding(2);
             this.txtCabezal.Name = "txtCabezal";
             this.txtCabezal.Size = new System.Drawing.Size(32, 20);
             this.txtCabezal.TabIndex = 8;
@@ -126,7 +128,7 @@
             // btnGuardar
             // 
             this.btnGuardar.Location = new System.Drawing.Point(7, 119);
-            this.btnGuardar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnGuardar.Margin = new System.Windows.Forms.Padding(2);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(139, 19);
             this.btnGuardar.TabIndex = 6;
@@ -136,7 +138,7 @@
             // btnBlanco
             // 
             this.btnBlanco.Location = new System.Drawing.Point(7, 96);
-            this.btnBlanco.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnBlanco.Margin = new System.Windows.Forms.Padding(2);
             this.btnBlanco.Name = "btnBlanco";
             this.btnBlanco.Size = new System.Drawing.Size(139, 19);
             this.btnBlanco.TabIndex = 4;
@@ -147,7 +149,7 @@
             // txtCinta
             // 
             this.txtCinta.Location = new System.Drawing.Point(7, 72);
-            this.txtCinta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCinta.Margin = new System.Windows.Forms.Padding(2);
             this.txtCinta.Name = "txtCinta";
             this.txtCinta.Size = new System.Drawing.Size(140, 20);
             this.txtCinta.TabIndex = 3;
@@ -165,7 +167,7 @@
             // txtAlfabeto
             // 
             this.txtAlfabeto.Location = new System.Drawing.Point(52, 23);
-            this.txtAlfabeto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtAlfabeto.Margin = new System.Windows.Forms.Padding(2);
             this.txtAlfabeto.Name = "txtAlfabeto";
             this.txtAlfabeto.Size = new System.Drawing.Size(94, 20);
             this.txtAlfabeto.TabIndex = 1;
@@ -182,6 +184,8 @@
             // 
             // grpOperaciones
             // 
+            this.grpOperaciones.Controls.Add(this.btnSimbolo);
+            this.grpOperaciones.Controls.Add(this.btnEscribir);
             this.grpOperaciones.Controls.Add(this.radEliminarXHastaFinalCinta);
             this.grpOperaciones.Controls.Add(this.radBuscarHastaFinal);
             this.grpOperaciones.Controls.Add(this.label4);
@@ -197,19 +201,40 @@
             this.grpOperaciones.Controls.Add(this.txtSimbolo);
             this.grpOperaciones.Controls.Add(this.label3);
             this.grpOperaciones.Location = new System.Drawing.Point(164, 10);
-            this.grpOperaciones.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpOperaciones.Margin = new System.Windows.Forms.Padding(2);
             this.grpOperaciones.Name = "grpOperaciones";
-            this.grpOperaciones.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpOperaciones.Padding = new System.Windows.Forms.Padding(2);
             this.grpOperaciones.Size = new System.Drawing.Size(322, 295);
             this.grpOperaciones.TabIndex = 1;
             this.grpOperaciones.TabStop = false;
             this.grpOperaciones.Text = "Operaciones";
             // 
+            // btnSimbolo
+            // 
+            this.btnSimbolo.Location = new System.Drawing.Point(106, 41);
+            this.btnSimbolo.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSimbolo.Name = "btnSimbolo";
+            this.btnSimbolo.Size = new System.Drawing.Size(79, 19);
+            this.btnSimbolo.TabIndex = 9;
+            this.btnSimbolo.Text = "Insertar Δ";
+            this.btnSimbolo.UseVisualStyleBackColor = true;
+            this.btnSimbolo.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnEscribir
+            // 
+            this.btnEscribir.Location = new System.Drawing.Point(206, 155);
+            this.btnEscribir.Name = "btnEscribir";
+            this.btnEscribir.Size = new System.Drawing.Size(75, 23);
+            this.btnEscribir.TabIndex = 22;
+            this.btnEscribir.Text = "Escribir";
+            this.btnEscribir.UseVisualStyleBackColor = true;
+            this.btnEscribir.Click += new System.EventHandler(this.btnEscribir_Click);
+            // 
             // radEliminarXHastaFinalCinta
             // 
             this.radEliminarXHastaFinalCinta.AutoSize = true;
             this.radEliminarXHastaFinalCinta.Location = new System.Drawing.Point(181, 110);
-            this.radEliminarXHastaFinalCinta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radEliminarXHastaFinalCinta.Margin = new System.Windows.Forms.Padding(2);
             this.radEliminarXHastaFinalCinta.Name = "radEliminarXHastaFinalCinta";
             this.radEliminarXHastaFinalCinta.Size = new System.Drawing.Size(133, 30);
             this.radEliminarXHastaFinalCinta.TabIndex = 21;
@@ -220,7 +245,7 @@
             // 
             this.radBuscarHastaFinal.AutoSize = true;
             this.radBuscarHastaFinal.Location = new System.Drawing.Point(181, 72);
-            this.radBuscarHastaFinal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radBuscarHastaFinal.Margin = new System.Windows.Forms.Padding(2);
             this.radBuscarHastaFinal.Name = "radBuscarHastaFinal";
             this.radBuscarHastaFinal.Size = new System.Drawing.Size(130, 30);
             this.radBuscarHastaFinal.TabIndex = 20;
@@ -250,7 +275,7 @@
             // btnOpDer
             // 
             this.btnOpDer.Location = new System.Drawing.Point(78, 201);
-            this.btnOpDer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOpDer.Margin = new System.Windows.Forms.Padding(2);
             this.btnOpDer.Name = "btnOpDer";
             this.btnOpDer.Size = new System.Drawing.Size(40, 35);
             this.btnOpDer.TabIndex = 17;
@@ -261,7 +286,7 @@
             // btnOpIzq
             // 
             this.btnOpIzq.Location = new System.Drawing.Point(26, 201);
-            this.btnOpIzq.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOpIzq.Margin = new System.Windows.Forms.Padding(2);
             this.btnOpIzq.Name = "btnOpIzq";
             this.btnOpIzq.Size = new System.Drawing.Size(40, 35);
             this.btnOpIzq.TabIndex = 16;
@@ -273,7 +298,7 @@
             // 
             this.radEliminarHastaEncontrar.AutoSize = true;
             this.radEliminarHastaEncontrar.Location = new System.Drawing.Point(14, 180);
-            this.radEliminarHastaEncontrar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radEliminarHastaEncontrar.Margin = new System.Windows.Forms.Padding(2);
             this.radEliminarHastaEncontrar.Name = "radEliminarHastaEncontrar";
             this.radEliminarHastaEncontrar.Size = new System.Drawing.Size(141, 17);
             this.radEliminarHastaEncontrar.TabIndex = 14;
@@ -284,7 +309,7 @@
             // 
             this.radEliminarDif.AutoSize = true;
             this.radEliminarDif.Location = new System.Drawing.Point(14, 158);
-            this.radEliminarDif.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radEliminarDif.Margin = new System.Windows.Forms.Padding(2);
             this.radEliminarDif.Name = "radEliminarDif";
             this.radEliminarDif.Size = new System.Drawing.Size(110, 17);
             this.radEliminarDif.TabIndex = 13;
@@ -295,7 +320,7 @@
             // 
             this.radBuscarDif.AutoSize = true;
             this.radBuscarDif.Location = new System.Drawing.Point(14, 137);
-            this.radBuscarDif.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radBuscarDif.Margin = new System.Windows.Forms.Padding(2);
             this.radBuscarDif.Name = "radBuscarDif";
             this.radBuscarDif.Size = new System.Drawing.Size(107, 17);
             this.radBuscarDif.TabIndex = 12;
@@ -306,7 +331,7 @@
             // 
             this.radEscribirPosAct.AutoSize = true;
             this.radEscribirPosAct.Location = new System.Drawing.Point(14, 116);
-            this.radEscribirPosAct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radEscribirPosAct.Margin = new System.Windows.Forms.Padding(2);
             this.radEscribirPosAct.Name = "radEscribirPosAct";
             this.radEscribirPosAct.Size = new System.Drawing.Size(148, 17);
             this.radEscribirPosAct.TabIndex = 11;
@@ -317,7 +342,7 @@
             // 
             this.radEliminarIgual.AutoSize = true;
             this.radEliminarIgual.Location = new System.Drawing.Point(14, 95);
-            this.radEliminarIgual.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radEliminarIgual.Margin = new System.Windows.Forms.Padding(2);
             this.radEliminarIgual.Name = "radEliminarIgual";
             this.radEliminarIgual.Size = new System.Drawing.Size(126, 17);
             this.radEliminarIgual.TabIndex = 9;
@@ -328,7 +353,7 @@
             // 
             this.radBuscarIgual.AutoSize = true;
             this.radBuscarIgual.Location = new System.Drawing.Point(14, 74);
-            this.radBuscarIgual.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radBuscarIgual.Margin = new System.Windows.Forms.Padding(2);
             this.radBuscarIgual.Name = "radBuscarIgual";
             this.radBuscarIgual.Size = new System.Drawing.Size(98, 17);
             this.radBuscarIgual.TabIndex = 8;
@@ -338,10 +363,11 @@
             // txtSimbolo
             // 
             this.txtSimbolo.Location = new System.Drawing.Point(14, 41);
-            this.txtSimbolo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSimbolo.Margin = new System.Windows.Forms.Padding(2);
             this.txtSimbolo.Name = "txtSimbolo";
             this.txtSimbolo.Size = new System.Drawing.Size(76, 20);
             this.txtSimbolo.TabIndex = 7;
+            this.txtSimbolo.TextChanged += new System.EventHandler(this.txtSimbolo_TextChanged);
             // 
             // label3
             // 
@@ -364,9 +390,9 @@
             this.grpCadena.Controls.Add(this.txtBuscarCadena);
             this.grpCadena.Controls.Add(this.lblBuscar);
             this.grpCadena.Location = new System.Drawing.Point(490, 10);
-            this.grpCadena.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpCadena.Margin = new System.Windows.Forms.Padding(2);
             this.grpCadena.Name = "grpCadena";
-            this.grpCadena.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpCadena.Padding = new System.Windows.Forms.Padding(2);
             this.grpCadena.Size = new System.Drawing.Size(150, 295);
             this.grpCadena.TabIndex = 2;
             this.grpCadena.TabStop = false;
@@ -395,7 +421,7 @@
             // btnADerecha
             // 
             this.btnADerecha.Location = new System.Drawing.Point(97, 96);
-            this.btnADerecha.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnADerecha.Margin = new System.Windows.Forms.Padding(2);
             this.btnADerecha.Name = "btnADerecha";
             this.btnADerecha.Size = new System.Drawing.Size(40, 35);
             this.btnADerecha.TabIndex = 12;
@@ -406,7 +432,7 @@
             // btnAIzquierda
             // 
             this.btnAIzquierda.Location = new System.Drawing.Point(11, 96);
-            this.btnAIzquierda.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnAIzquierda.Margin = new System.Windows.Forms.Padding(2);
             this.btnAIzquierda.Name = "btnAIzquierda";
             this.btnAIzquierda.Size = new System.Drawing.Size(40, 35);
             this.btnAIzquierda.TabIndex = 11;
@@ -427,7 +453,7 @@
             // btnCadBlanco
             // 
             this.btnCadBlanco.Location = new System.Drawing.Point(14, 62);
-            this.btnCadBlanco.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCadBlanco.Margin = new System.Windows.Forms.Padding(2);
             this.btnCadBlanco.Name = "btnCadBlanco";
             this.btnCadBlanco.Size = new System.Drawing.Size(123, 19);
             this.btnCadBlanco.TabIndex = 9;
@@ -438,7 +464,7 @@
             // txtBuscarCadena
             // 
             this.txtBuscarCadena.Location = new System.Drawing.Point(14, 39);
-            this.txtBuscarCadena.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtBuscarCadena.Margin = new System.Windows.Forms.Padding(2);
             this.txtBuscarCadena.Name = "txtBuscarCadena";
             this.txtBuscarCadena.Size = new System.Drawing.Size(124, 20);
             this.txtBuscarCadena.TabIndex = 1;
@@ -459,9 +485,9 @@
             this.grpMaquina.Controls.Add(this.lblMTC);
             this.grpMaquina.Controls.Add(this.dgMT);
             this.grpMaquina.Location = new System.Drawing.Point(9, 310);
-            this.grpMaquina.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpMaquina.Margin = new System.Windows.Forms.Padding(2);
             this.grpMaquina.Name = "grpMaquina";
-            this.grpMaquina.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpMaquina.Padding = new System.Windows.Forms.Padding(2);
             this.grpMaquina.Size = new System.Drawing.Size(632, 169);
             this.grpMaquina.TabIndex = 3;
             this.grpMaquina.TabStop = false;
@@ -470,7 +496,7 @@
             // ritCompuesta
             // 
             this.ritCompuesta.Location = new System.Drawing.Point(7, 113);
-            this.ritCompuesta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ritCompuesta.Margin = new System.Windows.Forms.Padding(2);
             this.ritCompuesta.Name = "ritCompuesta";
             this.ritCompuesta.Size = new System.Drawing.Size(612, 44);
             this.ritCompuesta.TabIndex = 2;
@@ -492,7 +518,8 @@
             this.dgMT.AllowUserToDeleteRows = false;
             this.dgMT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgMT.Location = new System.Drawing.Point(7, 17);
-            this.dgMT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgMT.Margin = new System.Windows.Forms.Padding(2);
+            this.dgMT.MultiSelect = false;
             this.dgMT.Name = "dgMT";
             this.dgMT.ReadOnly = true;
             this.dgMT.RowHeadersVisible = false;
@@ -512,7 +539,7 @@
             this.Controls.Add(this.grpCadena);
             this.Controls.Add(this.grpOperaciones);
             this.Controls.Add(this.grpDatos);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "SimuladorMT";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -569,6 +596,8 @@
         private System.Windows.Forms.Button btnOpIzq;
         private System.Windows.Forms.RadioButton radEliminarXHastaFinalCinta;
         private System.Windows.Forms.RadioButton radBuscarHastaFinal;
+        private System.Windows.Forms.Button btnEscribir;
+        private System.Windows.Forms.Button btnSimbolo;
     }
 }
 
