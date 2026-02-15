@@ -14,19 +14,25 @@ namespace SimuladorMaquinaTuring
     {
         int[] alfabeto;
         char[] cadena;
+        char[] separacion = new char[] { 'Δ' };
         int cabezal;
         string blanco = "Δ";
         private string alfabetoAnterior = "";
+        private ToolTip toolTip;
 
         public Form1()
         {
             InitializeComponent();
+            toolTip = new ToolTip();
+            toolTip.IsBalloon = true;
+            toolTip.AutoPopDelay = 2000;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             txtAlfabeto.TextChanged += txtAlfabeto_TextChanged;
             txtCinta.TextChanged += txtCinta_TextChanged;
+            txtSimbolo.KeyPress += txtSimbolo_KeyPress;
 
             dgMT.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
@@ -37,18 +43,104 @@ namespace SimuladorMaquinaTuring
             return char.IsLetterOrDigit(c);
         }
 
+        public void moverIzquierda()
+        {
+            int columnaActual = dgMT.CurrentCell.ColumnIndex;
+
+            if (columnaActual > 0)
+            {
+                dgMT.CurrentCell.Style.BackColor = Color.Empty;
+                dgMT.CurrentCell.Style.SelectionBackColor = Color.Empty;
+                dgMT.CurrentCell = dgMT.Rows[0].Cells[columnaActual - 1];
+                dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+                cabezal--;
+            }
+            else
+            {
+                MessageBox.Show("Has llegado al inicio de la cinta (Izquierda).");
+            }
+        }
+
+        public void moverDerecha()
+        {
+            int columnaActual = dgMT.CurrentCell.ColumnIndex;
+
+            if (columnaActual < dgMT.Columns.Count - 1)
+            {
+                dgMT.CurrentCell.Style.BackColor = Color.Empty;
+                dgMT.CurrentCell.Style.SelectionBackColor = Color.Empty;
+                dgMT.CurrentCell = dgMT.Rows[0].Cells[columnaActual + 1];
+                dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+                cabezal++;
+            }
+            else
+            {
+                cadena = cadena.Concat(separacion).ToArray();
+
+                dgMT.Columns.Clear();
+                dgMT.Rows.Clear();
+
+                for (int i = 0; i < cadena.Length; i++)
+                {
+                    dgMT.Columns.Add("Col" + i, i.ToString());
+                    dgMT.Columns[i].Width = 40;
+                }
+                object[] filaEstructurada = cadena.Select(c => c.ToString()).ToArray();
+                dgMT.Rows.Add(filaEstructurada);
+
+                cabezal++;
+                dgMT.Focus();
+
+                dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+                dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+            }
+        }
+
+        public void ActualizarCinta()
+        {
+            dgMT.CurrentCell.Style.BackColor = Color.Empty;
+            dgMT.CurrentCell.Style.SelectionBackColor = Color.Empty;
+            dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+            dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+            dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+        }
+
+        public void RehacerCinta()
+        {
+            dgMT.Columns.Clear();
+            dgMT.Rows.Clear();
+            for (int i = 0; i < cadena.Length; i++)
+            {
+                dgMT.Columns.Add("Col" + i, i.ToString());
+                dgMT.Columns[i].Width = 40;
+            }
+            object[] filaEstructurada = cadena.Select(c => c.ToString()).ToArray();
+            dgMT.Rows.Add(filaEstructurada);
+        }
+
         private void txtAlfabeto_TextChanged(object sender, EventArgs e)
         {
             string textoActual = txtAlfabeto.Text;
             string textoLimpio = "";
             int posicionCursor = txtAlfabeto.SelectionStart;
+            bool tienEerror = false;
 
             foreach (char c in textoActual)
             {
-                // Si el carácter es válido y no está duplicado
                 if (EsCaracterValido(c) && !textoLimpio.Contains(c))
                 {
                     textoLimpio += c;
+                }
+                else if (!EsCaracterValido(c))
+                {
+                    tienEerror = true;
+                }
+                else if (textoLimpio.Contains(c))
+                {
+                    tienEerror = true;
                 }
             }
 
@@ -56,11 +148,17 @@ namespace SimuladorMaquinaTuring
             {
                 txtAlfabeto.TextChanged -= txtAlfabeto_TextChanged;
                 txtAlfabeto.Text = textoLimpio;
-                // Ajustar la posición del cursor
                 if (posicionCursor > textoLimpio.Length)
                     posicionCursor = textoLimpio.Length;
                 txtAlfabeto.SelectionStart = posicionCursor;
                 txtAlfabeto.TextChanged += txtAlfabeto_TextChanged;
+
+                if (tienEerror)
+                {
+                    toolTip.ToolTipIcon = ToolTipIcon.Warning;
+                    toolTip.ToolTipTitle = "Carácter no válido";
+                    toolTip.Show("Solo se permiten caracteres alfanuméricos sin repetición.", txtAlfabeto, 0, -45, 2000);
+                }
             }
 
             LimpiarCadenaDeEntrada(alfabetoAnterior, textoLimpio);
@@ -106,12 +204,17 @@ namespace SimuladorMaquinaTuring
             string textoActual = txtCinta.Text;
             string textoLimpio = "";
             int posicionCursor = txtCinta.SelectionStart;
+            bool tienEerror = false;
 
             foreach (char c in textoActual)
             {
                 if (alfabeto.Contains(c) || c == 'Δ')
                 {
                     textoLimpio += c;
+                }
+                else
+                {
+                    tienEerror = true;
                 }
             }
 
@@ -125,93 +228,18 @@ namespace SimuladorMaquinaTuring
 
                 txtCinta.SelectionStart = posicionCursor;
                 txtCinta.TextChanged += txtCinta_TextChanged;
-            }
-        }
 
-        public void recorrerIzquierda()
-        {
-            if (cabezal > 0)
-            {
-                dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Empty;
-                dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Empty;
-
-                cabezal--;
-
-                dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
-                dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Yellow;
-                dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Orange;
-
-                
-                if (ritCompuesta != null)
-                    ritCompuesta.Text += "I->";
-            }
-            else
-            {
-                MessageBox.Show("No se puede mover a la izquierda. El cabezal está en el borde izquierdo de la cinta.",
-                    "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        public void recorrerDerecha()
-        {
-            if (cabezal < dgMT.ColumnCount - 1)
-            {
-                dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Empty;
-                dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Empty;
-
-                cabezal++;
-
-                dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
-                dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Yellow;
-                dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Orange;
-
-                if (ritCompuesta != null)
-                    ritCompuesta.Text += "D->";
-            }
-            else
-            {
-                char[] separacion = new char[] { 'Δ' };
-                cadena = cadena.Concat(separacion).ToArray();
-
-                dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Empty;
-                dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Empty;
-
-                RehacerCinta();
-
-                cabezal++;
-
-                dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
-                dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Yellow;
-                dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Orange;
-
-                if (ritCompuesta != null)
-                    ritCompuesta.Text += "D->";
-            }
-        }
-
-        public void RehacerCinta()
-        {
-            dgMT.Columns.Clear();
-            dgMT.Rows.Clear();
-
-            for (int i = 0; i < cadena.Length; i++)
-            {
-                int colIndex = dgMT.Columns.Add("col" + i, i.ToString());
-                dgMT.Columns[colIndex].Width = 40;
-                dgMT.Columns[colIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            }
-
-            dgMT.Rows.Add(); 
-
-            for (int i = 0; i < cadena.Length; i++)
-            {
-                dgMT.Rows[0].Cells[i].Value = cadena[i].ToString();
+                if (tienEerror)
+                {
+                    toolTip.ToolTipIcon = ToolTipIcon.Warning;
+                    toolTip.ToolTipTitle = "Carácter no permitido";
+                    toolTip.Show("Solo se permiten símbolos del alfabeto y Δ.", txtCinta, 0, -45, 2000);
+                }
             }
         }
 
         private void CargarCintaEnGrid()
         {
-            // Validar que haya una cadena
             string cinta = txtCinta.Text;
             if (string.IsNullOrEmpty(cinta))
             {
@@ -225,22 +253,15 @@ namespace SimuladorMaquinaTuring
             dgMT.Columns.Clear();
             dgMT.Rows.Clear();
 
-           
             for (int i = 0; i < cadena.Length; i++)
             {
-                
-                dgMT.Columns.Add("col" + i, i.ToString());
-                dgMT.Columns[i].Width = 50;
+                dgMT.Columns.Add("Col" + i, i.ToString());
+                dgMT.Columns[i].Width = 40;
             }
 
-            dgMT.Rows.Add();
+            object[] filaEstructurada = cadena.Select(c => c.ToString()).ToArray();
+            dgMT.Rows.Add(filaEstructurada);
 
-            for (int i = 0; i < cadena.Length; i++)
-            {
-                dgMT.Rows[0].Cells[i].Value = cadena[i].ToString();
-            }
-
-           
             int posicionInicial = 0;
 
             if (txtCabezal != null && !string.IsNullOrEmpty(txtCabezal.Text))
@@ -265,17 +286,16 @@ namespace SimuladorMaquinaTuring
                     posicionInicial = 0;
                 }
             }
-            
+
             cabezal = posicionInicial;
 
             dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
-            dgMT.Rows[0].Cells[cabezal].Style.BackColor = Color.Yellow;
-            dgMT.Rows[0].Cells[cabezal].Style.SelectionBackColor = Color.Orange;
+            dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+            dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
         }
 
         private void btnIniciarMT_Click(object sender, EventArgs e)
         {
-            // Validar que se haya ingresado un alfabeto
             if (string.IsNullOrEmpty(txtAlfabeto.Text))
             {
                 MessageBox.Show("Por favor, ingrese un alfabeto primero.", "Error",
@@ -283,7 +303,6 @@ namespace SimuladorMaquinaTuring
                 return;
             }
 
-            // Guardar el alfabeto
             string alfabetoCadena = txtAlfabeto.Text;
             char[] alfabetoChar = alfabetoCadena.ToCharArray();
             alfabeto = alfabetoChar.Select(c => (int)c).ToArray();
@@ -298,22 +317,47 @@ namespace SimuladorMaquinaTuring
                            "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void btnOpIzq_Click(object sender, EventArgs e)
+        private void txtSimbolo_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Validar que la máquina esté iniciada
-            if (cadena == null || cadena.Length == 0)
+            // Permitir teclas de control
+            if (char.IsControl(e.KeyChar))
             {
-                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            recorrerIzquierda();
+            // Si no hay cadena cargada, no permitir entrada
+            if (cadena == null || cadena.Length == 0)
+            {
+                e.Handled = true;
+                toolTip.ToolTipIcon = ToolTipIcon.Warning;
+                toolTip.ToolTipTitle = "Cadena no iniciada";
+                toolTip.Show("Primero debe cargar una cadena.", txtSimbolo, 0, -45, 2000);
+                return;
+            }
+
+            // Verificar si el carácter está en la cadena
+            bool caracterEnCadena = false;
+            foreach (char c in cadena)
+            {
+                if (c == e.KeyChar)
+                {
+                    caracterEnCadena = true;
+                    break;
+                }
+            }
+
+            // Si el carácter no está en la cadena, rechazarlo
+            if (!caracterEnCadena)
+            {
+                e.Handled = true;
+                toolTip.ToolTipIcon = ToolTipIcon.Warning;
+                toolTip.ToolTipTitle = "Símbolo no en cadena";
+                toolTip.Show($"El símbolo '{e.KeyChar}' no está en la cadena de entrada.", txtSimbolo, 0, -45, 2000);
+            }
         }
 
-        private void btnOpDer_Click(object sender, EventArgs e)
+        private async void btnOpIzq_Click(object sender, EventArgs e)
         {
-            // Validar que la máquina esté iniciada
             if (cadena == null || cadena.Length == 0)
             {
                 MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
@@ -321,7 +365,371 @@ namespace SimuladorMaquinaTuring
                 return;
             }
 
-            recorrerDerecha();
+            await EjecutarOperacion(false);
+        }
+
+        private async void btnOpDer_Click(object sender, EventArgs e)
+        {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            await EjecutarOperacion(true);
+        }
+
+        private async Task EjecutarOperacion(bool derecha)
+        {
+            if (radBuscarIgual.Checked)
+            {
+                await BuscarIgual(derecha);
+            }
+            else if (radEliminarIgual.Checked)
+            {
+                await EliminarIgual(derecha);
+            }
+            else if (radEscribirPosAct.Checked)
+            {
+                await EscribirPosicionActual(derecha);
+            }
+            else if (radBuscarDif.Checked)
+            {
+                await BuscarDiferente(derecha);
+            }
+            else if (radEliminarDif.Checked)
+            {
+                await EliminarDiferente(derecha);
+            }
+            else if (radEliminarHastaEncontrar.Checked)
+            {
+                await EliminarHastaEncontrar(derecha);
+            }
+        }
+
+        private async Task BuscarIgual(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a buscar.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+            bool encontrado = false;
+
+            if (derecha)
+            {
+                for (int i = cabezal + 1; i < cadena.Length; i++)
+                {
+                    moverDerecha();
+                    ritCompuesta.Text += "D->";
+                    await Task.Delay(500);
+
+                    if (cadena[cabezal] == simb)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = cabezal - 1; i >= 0; i--)
+                {
+                    moverIzquierda();
+                    ritCompuesta.Text += "I->";
+                    await Task.Delay(500);
+
+                    if (cadena[cabezal] == simb)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+            }
+
+            ActualizarCinta();
+
+            if (encontrado)
+            {
+                MessageBox.Show($"Símbolo '{simb}' encontrado en posición {cabezal}", "Búsqueda exitosa",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show($"Símbolo '{simb}' no encontrado", "Búsqueda fallida",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private async Task EliminarIgual(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a eliminar.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+            int cont = 0;
+
+            if (derecha)
+            {
+                while (cabezal < dgMT.Columns.Count - 1)
+                {
+                    moverDerecha();
+                    ritCompuesta.Text += "D->";
+                    await Task.Delay(500);
+
+                    if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
+                    {
+                        cont++;
+                        dgMT.CurrentCell.Value = blanco;
+                        ritCompuesta.Text += blanco + "->";
+                    }
+                }
+                MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) '{simb}'" : "No se eliminó ningún símbolo");
+            }
+            else
+            {
+                while (cabezal > 0)
+                {
+                    moverIzquierda();
+                    ritCompuesta.Text += "I->";
+                    await Task.Delay(500);
+
+                    if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
+                    {
+                        cont++;
+                        dgMT.CurrentCell.Value = blanco;
+                        ritCompuesta.Text += blanco + "->";
+                    }
+                }
+
+                // Verificar la primera posición
+                if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
+                {
+                    cont++;
+                    dgMT.CurrentCell.Value = blanco;
+                    ritCompuesta.Text += blanco + "->";
+                }
+
+                MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) '{simb}'" : "No se eliminó ningún símbolo");
+            }
+        }
+
+        private async Task EscribirPosicionActual(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a escribir.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+            cadena[cabezal] = simb;
+            dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+            ritCompuesta.Text += simb + "->";
+
+            await Task.Delay(500);
+
+            if (derecha)
+            {
+                moverDerecha();
+                ritCompuesta.Text += "D->";
+            }
+            else
+            {
+                moverIzquierda();
+                ritCompuesta.Text += "I->";
+            }
+
+            MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}");
+        }
+
+        private async Task BuscarDiferente(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo de referencia.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+            bool encontrado = false;
+
+            if (derecha)
+            {
+                while (cabezal < dgMT.Columns.Count - 1)
+                {
+                    moverDerecha();
+                    ritCompuesta.Text += "D->";
+                    await Task.Delay(500);
+
+                    if (cadena[cabezal] != simb)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                while (cabezal > 0)
+                {
+                    moverIzquierda();
+                    ritCompuesta.Text += "I->";
+                    await Task.Delay(500);
+
+                    if (cadena[cabezal] != simb)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+
+                // Verificar la primera posición
+                if (!encontrado && cadena[cabezal] != simb)
+                {
+                    encontrado = true;
+                }
+            }
+
+            ActualizarCinta();
+
+            if (encontrado)
+            {
+                MessageBox.Show($"Símbolo diferente a '{simb}' encontrado en posición {cabezal}", "Búsqueda exitosa",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show($"No se encontró símbolo diferente a '{simb}'", "Búsqueda fallida",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private async Task EliminarDiferente(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo de referencia.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+            int cont = 0;
+
+            if (derecha)
+            {
+                while (cabezal < dgMT.Columns.Count - 1)
+                {
+                    moverDerecha();
+                    ritCompuesta.Text += "D->";
+                    await Task.Delay(500);
+
+                    if (dgMT.CurrentCell.Value.ToString() != simb.ToString())
+                    {
+                        dgMT.CurrentCell.Value = blanco;
+                        cont++;
+                        ritCompuesta.Text += blanco + "->";
+                    }
+                }
+                MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) diferente(s) a '{simb}'" : "No se eliminó ningún símbolo");
+            }
+            else
+            {
+                while (cabezal > 0)
+                {
+                    moverIzquierda();
+                    ritCompuesta.Text += "I->";
+                    await Task.Delay(500);
+
+                    if (dgMT.CurrentCell.Value.ToString() != simb.ToString())
+                    {
+                        dgMT.CurrentCell.Value = blanco;
+                        cont++;
+                        ritCompuesta.Text += blanco + "->";
+                    }
+                }
+
+                // Verificar la primera posición
+                if (dgMT.CurrentCell.Value.ToString() != simb.ToString())
+                {
+                    dgMT.CurrentCell.Value = blanco;
+                    cont++;
+                    ritCompuesta.Text += blanco + "->";
+                }
+
+                MessageBox.Show(cont > 0 ? $"Eliminados {cont} símbolo(s) diferente(s) a '{simb}'" : "No se eliminó ningún símbolo");
+            }
+        }
+
+        private async Task EliminarHastaEncontrar(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a buscar.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+
+            if (derecha)
+            {
+                while (cabezal < dgMT.Columns.Count - 1)
+                {
+                    moverDerecha();
+                    ritCompuesta.Text += "D->";
+                    await Task.Delay(500);
+
+                    if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
+                    {
+                        MessageBox.Show($"Se eliminaron todos los símbolos hasta encontrar '{simb}' en la posición {cabezal}");
+                        return;
+                    }
+
+                    dgMT.CurrentCell.Value = blanco;
+                    ritCompuesta.Text += blanco + "->";
+                }
+
+                MessageBox.Show($"Símbolo '{simb}' no encontrado");
+            }
+            else
+            {
+                while (cabezal > 0)
+                {
+                    moverIzquierda();
+                    ritCompuesta.Text += "I->";
+                    await Task.Delay(500);
+
+                    if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
+                    {
+                        MessageBox.Show($"Se eliminaron todos los símbolos hasta encontrar '{simb}' en la posición {cabezal}");
+                        return;
+                    }
+
+                    dgMT.CurrentCell.Value = blanco;
+                    ritCompuesta.Text += blanco + "->";
+                }
+
+                // Verificar la primera posición
+                if (dgMT.CurrentCell.Value.ToString() == simb.ToString())
+                {
+                    MessageBox.Show($"Se eliminaron todos los símbolos hasta encontrar '{simb}' en la posición {cabezal}");
+                    return;
+                }
+
+                MessageBox.Show($"Símbolo '{simb}' no encontrado");
+            }
         }
 
         private void btnAIzquierda_Click(object sender, EventArgs e)
@@ -332,7 +740,6 @@ namespace SimuladorMaquinaTuring
         private void btnBlanco_Click(object sender, EventArgs e)
         {
             string texto = txtCinta.Text;
-
             int posicion = txtCinta.SelectionStart;
 
             if (posicion < 0)
@@ -342,10 +749,8 @@ namespace SimuladorMaquinaTuring
                 posicion = texto.Length;
 
             texto = texto.Insert(posicion, "Δ");
-
             txtCinta.Text = texto;
 
-            // Volver a colocar el cursor después del símbolo insertado
             txtCinta.SelectionStart = posicion + 1;
         }
 
