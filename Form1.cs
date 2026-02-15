@@ -754,7 +754,7 @@ namespace SimuladorMaquinaTuring
         {
 
         }
-
+        // buacar patron
         private async void btnAIzquierda_Click(object sender, EventArgs e)
         {
             await BuscarCadenaCompleta(false);
@@ -784,18 +784,24 @@ namespace SimuladorMaquinaTuring
         //metodo para buscar la cadena 
         private async Task BuscarCadenaCompleta(bool derecha)
         {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.");
+                return;
+            }
+
             if (string.IsNullOrEmpty(txtBuscarCadena.Text))
             {
                 MessageBox.Show("Ingrese una cadena a buscar.");
                 return;
             }
 
-            string cadenaBuscar = txtBuscarCadena.Text;
+            string patron = txtBuscarCadena.Text;
             bool encontrada = false;
 
             if (derecha)
             {
-                for (int i = cabezal; i <= cadena.Length - cadenaBuscar.Length; i++)
+                for (int i = cabezal; i <= cadena.Length - patron.Length; i++)
                 {
                     moverDerecha();
                     ritCompuesta.Text += "D->";
@@ -803,9 +809,9 @@ namespace SimuladorMaquinaTuring
 
                     bool coincide = true;
 
-                    for (int j = 0; j < cadenaBuscar.Length; j++)
+                    for (int j = 0; j < patron.Length; j++)
                     {
-                        if (cadena[i + j] != cadenaBuscar[j])
+                        if (cadena[i + j] != patron[j])
                         {
                             coincide = false;
                             break;
@@ -823,40 +829,44 @@ namespace SimuladorMaquinaTuring
             }
             else
             {
-                for (int i = cabezal; i >= 0; i--)
+                string patronInvertido = new string(patron.Reverse().ToArray());
+
+                int indicePatron = 0;
+                int posicionActual = cabezal;
+
+                while (posicionActual >= 0)
                 {
                     moverIzquierda();
                     ritCompuesta.Text += "I->";
                     await Task.Delay(400);
 
-                    if (i - cadenaBuscar.Length + 1 < 0)
-                        continue;
-
-                    bool coincide = true;
-
-                    for (int j = 0; j < cadenaBuscar.Length; j++)
+                    if (cadena[posicionActual] == patronInvertido[indicePatron])
                     {
-                        if (cadena[i - cadenaBuscar.Length + 1 + j] != cadenaBuscar[j])
+                        indicePatron++;
+
+                        if (indicePatron == patronInvertido.Length)
                         {
-                            coincide = false;
+                            encontrada = true;
+
+                            // Ajustar cabezal al inicio real del patrón
+                            cabezal = posicionActual;
+                            ActualizarCinta();
                             break;
                         }
                     }
-
-                    if (coincide)
+                    else
                     {
-                        cabezal = i - cadenaBuscar.Length + 1;
-                        ActualizarCinta();
-                        encontrada = true;
-                        break;
+                        indicePatron = 0;
                     }
+
+                    posicionActual--;
                 }
             }
 
             if (encontrada)
-                MessageBox.Show($"Cadena \"{cadenaBuscar}\" encontrada en posición {cabezal}");
+                MessageBox.Show($"Cadena \"{patron}\" encontrada en posición {cabezal}");
             else
-                MessageBox.Show($"Cadena \"{cadenaBuscar}\" no encontrada");
+                MessageBox.Show($"Cadena \"{patron}\" no encontrada");
         }
 
     }
