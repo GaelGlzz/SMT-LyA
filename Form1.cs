@@ -922,7 +922,6 @@ namespace SimuladorMaquinaTuring
 
             string patron = txtBuscarCadena.Text;
             bool encontrada = false;
-
             if (derecha)
             {
                 for (int i = cabezal; i <= cadena.Length - patron.Length; i++)
@@ -930,9 +929,7 @@ namespace SimuladorMaquinaTuring
                     moverDerecha();
                     AgregarMovimiento("D", cadena[cabezal].ToString());
                     await Task.Delay(400);
-
                     bool coincide = true;
-
                     for (int j = 0; j < patron.Length; j++)
                     {
                         if (cadena[i + j] != patron[j])
@@ -951,39 +948,32 @@ namespace SimuladorMaquinaTuring
                     }
                 }
             }
-            else
+            else //Correccion
             {
-                string patronInvertido = new string(patron.Reverse().ToArray());
-
-                int indicePatron = 0;
-                int posicionActual = cabezal;
-
-                while (posicionActual >= 0)
+                for (int i = cabezal; i >= patron.Length - 1; i--)
                 {
                     moverIzquierda();
+
                     AgregarMovimiento("I", cadena[cabezal].ToString());
                     await Task.Delay(400);
+                    bool coincide = true;
 
-                    if (cadena[posicionActual] == patronInvertido[indicePatron])
+                    for (int j = 0; j < patron.Length; j++)
                     {
-                        indicePatron++;
-
-                        if (indicePatron == patronInvertido.Length)
+                        if (cadena[i - j] != patron[j])
                         {
-                            encontrada = true;
-
-                            // Ajustar cabezal al inicio real del patrón
-                            cabezal = posicionActual;
-                            ActualizarCinta();
+                            coincide = false;
                             break;
                         }
                     }
-                    else
-                    {
-                        indicePatron = 0;
-                    }
 
-                    posicionActual--;
+                    if (coincide)
+                    {
+                        cabezal = i - patron.Length + 1;
+                        ActualizarCinta();
+                        encontrada = true;
+                        break;
+                    }
                 }
             }
 
@@ -993,6 +983,8 @@ namespace SimuladorMaquinaTuring
                 MessageBox.Show($"Cadena \"{patron}\" no encontrada");
         }
 
+
+
         private void button1_Click(object sender, EventArgs e)
         {
             txtSimbolo.Text = "Δ";  
@@ -1001,6 +993,11 @@ namespace SimuladorMaquinaTuring
         }
 
         private void txtSimbolo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radEliminarXHastaFinalCinta_CheckedChanged(object sender, EventArgs e)
         {
 
         }

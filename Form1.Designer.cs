@@ -240,6 +240,7 @@
             this.radEliminarXHastaFinalCinta.TabIndex = 21;
             this.radEliminarXHastaFinalCinta.Text = "Eliminar símbolo hasta \r\nel final de la cinta";
             this.radEliminarXHastaFinalCinta.UseVisualStyleBackColor = true;
+            this.radEliminarXHastaFinalCinta.CheckedChanged += new System.EventHandler(this.radEliminarXHastaFinalCinta_CheckedChanged);
             // 
             // radBuscarHastaFinal
             // 
