@@ -587,8 +587,28 @@ namespace SimuladorMaquinaTuring
                 }
                 else
                 {
-                    MessageBox.Show("No se puede mover más a la derecha.", "Límite alcanzado", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    // Llegó al final, agregar Δ a la cinta
+                    cadena = cadena.Concat(separacion).ToArray();
+
+                    dgMT.Columns.Clear();
+                    dgMT.Rows.Clear();
+
+                    for (int i = 0; i < cadena.Length; i++)
+                    {
+                        dgMT.Columns.Add("Col" + i, i.ToString());
+                        dgMT.Columns[i].Width = 40;
+                    }
+                    object[] filaEstructurada = cadena.Select(c => c.ToString()).ToArray();
+                    dgMT.Rows.Add(filaEstructurada);
+
+                    cabezal++;
+                    dgMT.Focus();
+
+                    dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+                    dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                    dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
                 }
             }
             else
