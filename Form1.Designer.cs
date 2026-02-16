@@ -74,6 +74,8 @@
             this.radEliminarDesdePosicion = new System.Windows.Forms.RadioButton();
             this.chkEliminarSimboloRecorrido = new System.Windows.Forms.CheckBox();
             this.btnEliminarMarca = new System.Windows.Forms.Button();
+            this.radEscribirHacia = new System.Windows.Forms.RadioButton();
+            this.btnCopiarInversa = new System.Windows.Forms.Button();
             this.grpDatos.SuspendLayout();
             this.grpOperaciones.SuspendLayout();
             this.grpCadena.SuspendLayout();
@@ -177,6 +179,8 @@
             // 
             // grpOperaciones
             // 
+            this.grpOperaciones.Controls.Add(this.btnCopiarInversa);
+            this.grpOperaciones.Controls.Add(this.radEscribirHacia);
             this.grpOperaciones.Controls.Add(this.radEliminarDesdePosicion);
             this.grpOperaciones.Controls.Add(this.radMoverCelda);
             this.grpOperaciones.Controls.Add(this.btnSimbolo);
@@ -569,7 +573,7 @@
             // radEliminarDesdePosicion
             // 
             this.radEliminarDesdePosicion.AutoSize = true;
-            this.radEliminarDesdePosicion.Location = new System.Drawing.Point(247, 94);
+            this.radEliminarDesdePosicion.Location = new System.Drawing.Point(231, 221);
             this.radEliminarDesdePosicion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radEliminarDesdePosicion.Name = "radEliminarDesdePosicion";
             this.radEliminarDesdePosicion.Size = new System.Drawing.Size(155, 36);
@@ -597,6 +601,28 @@
             this.btnEliminarMarca.TabIndex = 18;
             this.btnEliminarMarca.Text = "Eliminar Marca";
             this.btnEliminarMarca.UseVisualStyleBackColor = true;
+            // 
+            // radEscribirHacia
+            // 
+            this.radEscribirHacia.AutoSize = true;
+            this.radEscribirHacia.Location = new System.Drawing.Point(231, 94);
+            this.radEscribirHacia.Name = "radEscribirHacia";
+            this.radEscribirHacia.Size = new System.Drawing.Size(160, 20);
+            this.radEscribirHacia.TabIndex = 25;
+            this.radEscribirHacia.TabStop = true;
+            this.radEscribirHacia.Text = "Escribir símbolo hacia";
+            this.radEscribirHacia.UseVisualStyleBackColor = true;
+            this.radEscribirHacia.CheckedChanged += new System.EventHandler(this.radEscribirHacia_CheckedChanged);
+            // 
+            // btnCopiarInversa
+            // 
+            this.btnCopiarInversa.Location = new System.Drawing.Point(271, 24);
+            this.btnCopiarInversa.Name = "btnCopiarInversa";
+            this.btnCopiarInversa.Size = new System.Drawing.Size(144, 49);
+            this.btnCopiarInversa.TabIndex = 26;
+            this.btnCopiarInversa.Text = "Copiar cadena inversa";
+            this.btnCopiarInversa.UseVisualStyleBackColor = true;
+            this.btnCopiarInversa.Click += new System.EventHandler(this.btnCopiarInversa_Click_1);
             // 
             // Form1
             // 
@@ -675,6 +701,8 @@
         private System.Windows.Forms.RadioButton radEliminarDesdePosicion;
         private System.Windows.Forms.CheckBox chkEliminarSimboloRecorrido;
         private System.Windows.Forms.Button btnEliminarMarca;
+        private System.Windows.Forms.Button btnCopiarInversa;
+        private System.Windows.Forms.RadioButton radEscribirHacia;
     }
 }
 

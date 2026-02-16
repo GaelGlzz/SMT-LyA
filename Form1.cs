@@ -568,6 +568,10 @@ namespace SimuladorMaquinaTuring
             {
                 MoverUnaCelda(derecha);
             }
+            else if (radEscribirHacia.Checked)
+            {
+                await EscribirHacia(derecha);
+            }
         }
 
         private void MoverUnaCelda(bool derecha)
@@ -1529,6 +1533,300 @@ namespace SimuladorMaquinaTuring
         private void chkEliminarSimboloRecorrido_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private async void btnCopiarInversa_Click_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtCinta.Text))
+            {
+                MessageBox.Show("Primero debe cargar una cadena de entrada.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Obtener la cadena de entrada original
+            string cadenaOriginal = txtCinta.Text;
+            
+            // Invertir la cadena de entrada
+            string cadenaInvertida = new string(cadenaOriginal.Reverse().ToArray());
+
+            // Moverse hasta el final de la cinta
+            while (cabezal < dgMT.Columns.Count - 1)
+            {
+                moverDerecha();
+                AgregarMovimiento("D", cadena[cabezal].ToString());
+                await Task.Delay(300);
+            }
+
+            // Ahora escribir cada carácter de la cadena invertida
+            foreach (char c in cadenaInvertida)
+            {
+                // Expandir la cinta
+                cadena = cadena.Concat(separacion).ToArray();
+
+                dgMT.Columns.Clear();
+                dgMT.Rows.Clear();
+
+                for (int i = 0; i < cadena.Length; i++)
+                {
+                    dgMT.Columns.Add("Col" + i, i.ToString());
+                    dgMT.Columns[i].Width = 40;
+                }
+                object[] filaEstructurada = cadena.Select(x => x.ToString()).ToArray();
+                dgMT.Rows.Add(filaEstructurada);
+
+                // Mover a la derecha (nueva posición)
+                cabezal++;
+                
+                // Escribir el carácter
+                cadena[cabezal] = c;
+                dgMT.Rows[0].Cells[cabezal].Value = c.ToString();
+
+                // Actualizar visualización del cabezal
+                dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+                dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+
+                // Registrar el movimiento y escritura en ritCompuesta
+                AgregarMovimiento("D", c.ToString());
+
+                await Task.Delay(300);
+            }
+
+            MessageBox.Show($"Cadena invertida insertada en la cinta:\n{cadenaInvertida}\n\nPosición actual: {cabezal}", 
+                "Operación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void radEscribirHacia_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radEscribirHacia.Checked)
+            {
+                // Habilitar los botones de operación para escribir hacia izquierda/derecha
+                btnOpIzq.Enabled = true;
+                btnOpDer.Enabled = true;
+            }
+        }
+
+        private async void btnOpIzq_Click_EscribirHacia(object sender, EventArgs e)
+        {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a escribir.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (radEscribirHacia.Checked)
+            {
+                char simb = txtSimbolo.Text[0];
+
+                if (cabezal > 0)
+                {
+                    // Mover a la izquierda
+                    moverIzquierda();
+                    
+                    // Escribir el símbolo en la nueva posición
+                    cadena[cabezal] = simb;
+                    dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+                    // Registrar el movimiento y escritura en ritCompuesta
+                    AgregarMovimiento("I", simb.ToString());
+
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se puede mover más a la izquierda.", "Límite alcanzado",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private async void btnOpDer_Click_EscribirHacia(object sender, EventArgs e)
+        {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a escribir.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (radEscribirHacia.Checked)
+            {
+                char simb = txtSimbolo.Text[0];
+
+                if (cabezal < dgMT.Columns.Count - 1)
+                {
+                    // Mover a la derecha
+                    moverDerecha();
+                    
+                    // Escribir el símbolo en la nueva posición
+                    cadena[cabezal] = simb;
+                    dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+                    // Registrar el movimiento y escritura en ritCompuesta
+                    AgregarMovimiento("D", simb.ToString());
+
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // Llegó al final, expandir la cinta y escribir
+                    cadena = cadena.Concat(separacion).ToArray();
+
+                    dgMT.Columns.Clear();
+                    dgMT.Rows.Clear();
+
+                    for (int i = 0; i < cadena.Length; i++)
+                    {
+                        dgMT.Columns.Add("Col" + i, i.ToString());
+                        dgMT.Columns[i].Width = 40;
+                    }
+                    object[] filaEstructurada = cadena.Select(c => c.ToString()).ToArray();
+                    dgMT.Rows.Add(filaEstructurada);
+
+                    // Mover a la nueva posición
+                    cabezal++;
+                    
+                    // Escribir el símbolo
+                    cadena[cabezal] = simb;
+                    dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+                    // Actualizar visualización del cabezal
+                    dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+                    dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                    dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+
+                    // Registrar el movimiento y escritura en ritCompuesta
+                    AgregarMovimiento("D", simb.ToString());
+
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private async Task EscribirHacia(bool derecha)
+        {
+            if (string.IsNullOrEmpty(txtSimbolo.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un símbolo a escribir.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            char simb = txtSimbolo.Text[0];
+
+            if (derecha)
+            {
+                if (cabezal < dgMT.Columns.Count - 1)
+                {
+                    // Mover a la derecha
+                    moverDerecha();
+                    
+                    // Escribir el símbolo en la nueva posición
+                    cadena[cabezal] = simb;
+                    dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+                    // Registrar el movimiento y escritura en ritCompuesta
+                    AgregarMovimiento("D", simb.ToString());
+
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // Llegó al final, expandir la cinta y escribir
+                    cadena = cadena.Concat(separacion).ToArray();
+
+                    dgMT.Columns.Clear();
+                    dgMT.Rows.Clear();
+
+                    for (int i = 0; i < cadena.Length; i++)
+                    {
+                        dgMT.Columns.Add("Col" + i, i.ToString());
+                        dgMT.Columns[i].Width = 40;
+                    }
+                    object[] filaEstructurada = cadena.Select(c => c.ToString()).ToArray();
+                    dgMT.Rows.Add(filaEstructurada);
+
+                    // Mover a la nueva posición
+                    cabezal++;
+                    
+                    // Escribir el símbolo
+                    cadena[cabezal] = simb;
+                    dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+                    // Actualizar visualización del cabezal
+                    dgMT.CurrentCell = dgMT.Rows[0].Cells[cabezal];
+                    dgMT.CurrentCell.Style.BackColor = Color.Yellow;
+                    dgMT.CurrentCell.Style.SelectionBackColor = Color.Orange;
+
+                    // Registrar el movimiento y escritura en ritCompuesta
+                    AgregarMovimiento("D", simb.ToString());
+
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                if (cabezal > 0)
+                {
+                    // Mover a la izquierda
+                    moverIzquierda();
+                    
+                    // Escribir el símbolo en la nueva posición
+                    cadena[cabezal] = simb;
+                    dgMT.Rows[0].Cells[cabezal].Value = simb.ToString();
+
+                    // Registrar el movimiento y escritura en ritCompuesta
+                    AgregarMovimiento("I", simb.ToString());
+
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se escribió '{simb}' en la posición {cabezal}", "Operación exitosa",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se puede mover más a la izquierda.", "Límite alcanzado",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
     }
 }
