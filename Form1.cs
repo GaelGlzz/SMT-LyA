@@ -58,11 +58,15 @@ namespace SimuladorMaquinaTuring
             radEliminarDif.CheckedChanged += RadioButton_CheckedChanged;
             radEliminarHastaEncontrar.CheckedChanged += RadioButton_CheckedChanged;
 
+            // Agregar evento al botón eliminar marca
+            btnEliminarMarca.Click += btnEliminarMarca_Click;
+
             // Estado inicial de los botones
             ActualizarEstadoBotones();
             
-            // Desactivar chkEliminarSimboloRecorrido inicialmente
+            // Desactivar chkEliminarSimboloRecorrido y btnRegresarMarca inicialmente
             chkEliminarSimboloRecorrido.Enabled = false;
+            btnRegresarMarca.Enabled = false;
         }
 
         private void RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -1171,6 +1175,15 @@ namespace SimuladorMaquinaTuring
                 return;
             }
 
+            // Verificar si ya existe una marca
+            if (posicionMarca != -1)
+            {
+                MessageBox.Show("Ya existe una marca insertada en posición " + posicionMarca + 
+                    ".\nDebe eliminarla primero antes de insertar una nueva.", "Marca existente",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Guardar la posición actual
             posicionMarca = cabezal;
             
@@ -1178,8 +1191,9 @@ namespace SimuladorMaquinaTuring
             dgMT.Rows[0].Cells[cabezal].Value = "*";
             cadena[cabezal] = '*';  
 
-            // Activar chkEliminarSimboloRecorrido
+            // Activar chkEliminarSimboloRecorrido y btnRegresarMarca
             chkEliminarSimboloRecorrido.Enabled = true;
+            btnRegresarMarca.Enabled = true;
 
             MessageBox.Show($"Marca insertada en posición {posicionMarca}", "Marca insertada",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1306,6 +1320,39 @@ namespace SimuladorMaquinaTuring
 
             MessageBox.Show($"Regresó a la marca en posición {posicionMarca}", "Marca alcanzada",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void LimpiarMarca()
+        {
+            if (posicionMarca != -1 && posicionMarca < dgMT.Columns.Count)
+            {
+                // Restaurar la celda a su contenido original (blanco)
+                dgMT.Rows[0].Cells[posicionMarca].Value = blanco;
+                cadena[posicionMarca] = blanco[0];
+                
+                // Limpiar la marca
+                posicionMarca = -1;
+                
+                // Desactivar el checkbox y el botón de regresar
+                chkEliminarSimboloRecorrido.Enabled = false;
+                chkEliminarSimboloRecorrido.Checked = false;
+                btnRegresarMarca.Enabled = false;
+                
+                MessageBox.Show("Marca eliminada correctamente.", "Marca eliminada",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnEliminarMarca_Click(object sender, EventArgs e)
+        {
+            if (posicionMarca == -1)
+            {
+                MessageBox.Show("No hay marca establecida para eliminar.", "Sin marca",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            LimpiarMarca();
         }
 
         private async Task BuscarHastaExtremo(bool derecha)

@@ -73,6 +73,7 @@
             this.btnInsertarMarcaInicial = new System.Windows.Forms.Button();
             this.radEliminarDesdePosicion = new System.Windows.Forms.RadioButton();
             this.chkEliminarSimboloRecorrido = new System.Windows.Forms.CheckBox();
+            this.btnEliminarMarca = new System.Windows.Forms.Button();
             this.grpDatos.SuspendLayout();
             this.grpOperaciones.SuspendLayout();
             this.grpCadena.SuspendLayout();
@@ -532,6 +533,7 @@
             // 
             // grpMarca
             // 
+            this.grpMarca.Controls.Add(this.btnEliminarMarca);
             this.grpMarca.Controls.Add(this.chkEliminarSimboloRecorrido);
             this.grpMarca.Controls.Add(this.btnRegresarMarca);
             this.grpMarca.Controls.Add(this.btnInsertarMarcaInicial);
@@ -579,13 +581,22 @@
             // chkEliminarSimboloRecorrido
             // 
             this.chkEliminarSimboloRecorrido.AutoSize = true;
-            this.chkEliminarSimboloRecorrido.Location = new System.Drawing.Point(29, 106);
+            this.chkEliminarSimboloRecorrido.Location = new System.Drawing.Point(29, 134);
             this.chkEliminarSimboloRecorrido.Name = "chkEliminarSimboloRecorrido";
             this.chkEliminarSimboloRecorrido.Size = new System.Drawing.Size(138, 36);
             this.chkEliminarSimboloRecorrido.TabIndex = 17;
             this.chkEliminarSimboloRecorrido.Text = "Eliminar símbolos \r\nen recorrido";
             this.chkEliminarSimboloRecorrido.UseVisualStyleBackColor = true;
             this.chkEliminarSimboloRecorrido.CheckedChanged += new System.EventHandler(this.chkEliminarSimboloRecorrido_CheckedChanged);
+            // 
+            // btnEliminarMarca
+            // 
+            this.btnEliminarMarca.Location = new System.Drawing.Point(13, 101);
+            this.btnEliminarMarca.Name = "btnEliminarMarca";
+            this.btnEliminarMarca.Size = new System.Drawing.Size(175, 30);
+            this.btnEliminarMarca.TabIndex = 18;
+            this.btnEliminarMarca.Text = "Eliminar Marca";
+            this.btnEliminarMarca.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -663,6 +674,7 @@
         private System.Windows.Forms.Button btnInsertarMarcaInicial;
         private System.Windows.Forms.RadioButton radEliminarDesdePosicion;
         private System.Windows.Forms.CheckBox chkEliminarSimboloRecorrido;
+        private System.Windows.Forms.Button btnEliminarMarca;
     }
 }
 
