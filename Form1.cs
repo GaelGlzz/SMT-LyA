@@ -1124,7 +1124,8 @@ namespace SimuladorMaquinaTuring
             
             // Marcar la celda actual con *
             dgMT.Rows[0].Cells[cabezal].Value = "*";
-            
+            cadena[cabezal] = '*';  
+
             MessageBox.Show($"Marca insertada en posición {posicionMarca}", "Marca insertada",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
