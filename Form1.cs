@@ -19,6 +19,7 @@ namespace SimuladorMaquinaTuring
         string blanco = "Δ";
         private string alfabetoAnterior = "";
         private ToolTip toolTip;
+        private int posicionMarca = -1;  // Para guardar la posición de la marca
 
         public Form1()
         {
@@ -33,6 +34,7 @@ namespace SimuladorMaquinaTuring
             txtAlfabeto.TextChanged += txtAlfabeto_TextChanged;
             txtCinta.TextChanged += txtCinta_TextChanged;
             txtSimbolo.KeyPress += txtSimbolo_KeyPress;
+            txtBuscarCadena.TextChanged += txtBuscarCadena_TextChanged;
 
             dgMT.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
@@ -298,7 +300,12 @@ namespace SimuladorMaquinaTuring
 
             foreach (char c in textoActual)
             {
-                if (alfabeto.Contains(c) || c == 'Δ')
+                if (c == ' ')
+                {
+                    // Reemplazar espacio con Δ
+                    textoLimpio += 'Δ';
+                }
+                else if (alfabeto.Contains(c) || c == 'Δ')
                 {
                     textoLimpio += c;
                 }
@@ -323,7 +330,7 @@ namespace SimuladorMaquinaTuring
                 {
                     toolTip.ToolTipIcon = ToolTipIcon.Warning;
                     toolTip.ToolTipTitle = "Carácter no permitido";
-                    toolTip.Show("Solo se permiten símbolos del alfabeto y Δ.", txtCinta, 0, -45, 2000);
+                    toolTip.Show("Solo se permiten símbolos del alfabeto y Δ. Los espacios se convertirán a Δ.", txtCinta, 0, -45, 2000);
                 }
             }
         }
@@ -415,6 +422,14 @@ namespace SimuladorMaquinaTuring
                 return;
             }
 
+            // Si presiona espacio, insertar Δ
+            if (e.KeyChar == ' ')
+            {
+                e.Handled = true;
+                txtSimbolo.Text = "Δ";
+                return;
+            }
+
             // Si no hay cadena cargada, no permitir entrada
             if (cadena == null || cadena.Length == 0)
             {
@@ -435,6 +450,7 @@ namespace SimuladorMaquinaTuring
                     break;
                 }
             }
+            
             //Solo permitir un carácter
             if (txtSimbolo.Text.Length >= 1)
             {
@@ -532,6 +548,48 @@ namespace SimuladorMaquinaTuring
             else if (radEliminarHastaEncontrar.Checked)
             {
                 await EliminarHastaEncontrar(derecha);
+            }
+            else if (radBuscarXHastaExtremo.Checked)
+            {
+                await BuscarHastaExtremo(derecha);
+            }
+            else if (radEliminarXHastaExtremo.Checked)
+            {
+                await EliminarHastaExtremo(derecha);
+            }
+            else if (radMoverCelda.Checked)
+            {
+                MoverUnaCelda(derecha);
+            }
+        }
+
+        private void MoverUnaCelda(bool derecha)
+        {
+            if (derecha)
+            {
+                if (cabezal < dgMT.Columns.Count - 1)
+                {
+                    moverDerecha();
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
+                }
+                else
+                {
+                    MessageBox.Show("No se puede mover más a la derecha.", "Límite alcanzado", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                if (cabezal > 0)
+                {
+                    moverIzquierda();
+                    AgregarMovimiento("I", cadena[cabezal].ToString());
+                }
+                else
+                {
+                    MessageBox.Show("No se puede mover más a la izquierda.", "Límite alcanzado", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
         }
 
@@ -997,9 +1055,288 @@ namespace SimuladorMaquinaTuring
 
         }
 
+        private void txtBuscarCadena_TextChanged(object sender, EventArgs e)
+        {
+            string alfabeto = txtAlfabeto.Text;
+            string textoActual = txtBuscarCadena.Text;
+            string textoLimpio = "";
+            int posicionCursor = txtBuscarCadena.SelectionStart;
+            bool tienEerror = false;
+
+            foreach (char c in textoActual)
+            {
+                if (c == ' ')
+                {
+                    // Reemplazar espacio con Δ
+                    textoLimpio += 'Δ';
+                }
+                else if (alfabeto.Contains(c) || c == 'Δ')
+                {
+                    textoLimpio += c;
+                }
+                else
+                {
+                    tienEerror = true;
+                }
+            }
+
+            if (textoLimpio != textoActual)
+            {
+                txtBuscarCadena.TextChanged -= txtBuscarCadena_TextChanged;
+                txtBuscarCadena.Text = textoLimpio;
+
+                if (posicionCursor > textoLimpio.Length)
+                    posicionCursor = textoLimpio.Length;
+
+                txtBuscarCadena.SelectionStart = posicionCursor;
+                txtBuscarCadena.TextChanged += txtBuscarCadena_TextChanged;
+
+                if (tienEerror)
+                {
+                    toolTip.ToolTipIcon = ToolTipIcon.Warning;
+                    toolTip.ToolTipTitle = "Carácter no permitido";
+                    toolTip.Show("Solo se permiten símbolos del alfabeto y Δ. Los espacios se convertirán a Δ.", txtBuscarCadena, 0, -45, 2000);
+                }
+            }
+        }
+
         private void radEliminarXHastaFinalCinta_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void InsertarMarcaInicial()
+        {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Guardar la posición actual
+            posicionMarca = cabezal;
+            
+            // Marcar la celda actual con *
+            dgMT.Rows[0].Cells[cabezal].Value = "*";
+            
+            MessageBox.Show($"Marca insertada en posición {posicionMarca}", "Marca insertada",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async void RegresarMarca()
+        {
+            if (cadena == null || cadena.Length == 0)
+            {
+                MessageBox.Show("Primero debe iniciar la máquina de Turing.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (posicionMarca == -1)
+            {
+                MessageBox.Show("No hay marca establecida. Primero inserte una marca.", "Sin marca",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Determinar dirección hacia la marca
+            bool irDerecha = cabezal < posicionMarca;
+
+            // Moverse hacia la marca
+            while (cabezal != posicionMarca)
+            {
+                if (irDerecha)
+                {
+                    moverDerecha();
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
+                }
+                else
+                {
+                    moverIzquierda();
+                    AgregarMovimiento("I", cadena[cabezal].ToString());
+                }
+                await Task.Delay(500);
+            }
+
+            MessageBox.Show($"Regresó a la marca en posición {posicionMarca}", "Marca alcanzada",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async Task BuscarHastaExtremo(bool derecha)
+        {
+            // Buscar el ÚLTIMO símbolo diferente a Δ hasta el extremo (ignorando txtSimbolo)
+            int posicionEncontrada = -1;
+            char ultimoSimbolo = ' ';
+
+            if (derecha)
+            {
+                // Buscar desde posición actual hacia la derecha hasta encontrar el último símbolo
+                for (int i = cabezal; i < dgMT.Columns.Count; i++)
+                {
+                    if (i > cabezal)
+                    {
+                        moverDerecha();
+                        AgregarMovimiento("D", cadena[cabezal].ToString());
+                        await Task.Delay(500);
+                    }
+
+                    // Si encontramos un símbolo diferente a Δ, guardamos su posición
+                    if (cadena[cabezal] != 'Δ')
+                    {
+                        posicionEncontrada = cabezal;
+                        ultimoSimbolo = cadena[cabezal];
+                    }
+                }
+            }
+            else
+            {
+                // Buscar desde posición actual hacia la izquierda hasta encontrar el último símbolo
+                for (int i = cabezal; i >= 0; i--)
+                {
+                    if (i < cabezal)
+                    {
+                        moverIzquierda();
+                        AgregarMovimiento("I", cadena[cabezal].ToString());
+                        await Task.Delay(500);
+                    }
+
+                    // Si encontramos un símbolo diferente a Δ, guardamos su posición
+                    if (cadena[cabezal] != 'Δ')
+                    {
+                        posicionEncontrada = cabezal;
+                        ultimoSimbolo = cadena[cabezal];
+                    }
+                }
+            }
+
+            ActualizarCinta();
+
+            if (posicionEncontrada != -1)
+            {
+                MessageBox.Show($"Último símbolo encontrado: '{ultimoSimbolo}' en posición {posicionEncontrada}",
+                    "Búsqueda completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("No se encontró ningún símbolo diferente a Δ hasta el extremo de la cinta.",
+                    "Búsqueda completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private async Task EliminarHastaExtremo(bool derecha)
+        {
+            // Eliminar el ÚLTIMO símbolo diferente a Δ hasta el extremo (ignorando txtSimbolo)
+            int posicionUltimoEncontrado = -1;
+            char ultimoSimbolo = ' ';
+
+            if (derecha)
+            {
+                // Buscar desde posición actual hacia la derecha hasta encontrar el último símbolo
+                for (int i = cabezal; i < dgMT.Columns.Count; i++)
+                {
+                    if (i > cabezal)
+                    {
+                        moverDerecha();
+                        AgregarMovimiento("D", cadena[cabezal].ToString());
+                        await Task.Delay(500);
+                    }
+
+                    // Si encontramos un símbolo diferente a Δ, guardamos su posición
+                    if (cadena[cabezal] != 'Δ')
+                    {
+                        posicionUltimoEncontrado = cabezal;
+                        ultimoSimbolo = cadena[cabezal];
+                    }
+                }
+
+                // Si encontramos un símbolo, eliminarlo
+                if (posicionUltimoEncontrado != -1)
+                {
+                    // Mover al símbolo a eliminar
+                    while (cabezal < posicionUltimoEncontrado)
+                    {
+                        moverDerecha();
+                        AgregarMovimiento("D", cadena[cabezal].ToString());
+                        await Task.Delay(300);
+                    }
+
+                    // Eliminar el símbolo
+                    dgMT.Rows[0].Cells[cabezal].Value = blanco;
+                    cadena[cabezal] = 'Δ';
+                    AgregarMovimiento("", blanco);
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se eliminó el símbolo '{ultimoSimbolo}' en posición {posicionUltimoEncontrado}",
+                        "Operación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró ningún símbolo diferente a Δ para eliminar.",
+                        "Operación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                // Buscar desde posición actual hacia la izquierda hasta encontrar el último símbolo
+                for (int i = cabezal; i >= 0; i--)
+                {
+                    if (i < cabezal)
+                    {
+                        moverIzquierda();
+                        AgregarMovimiento("I", cadena[cabezal].ToString());
+                        await Task.Delay(500);
+                    }
+
+                    // Si encontramos un símbolo diferente a Δ, guardamos su posición
+                    if (cadena[cabezal] != 'Δ')
+                    {
+                        posicionUltimoEncontrado = cabezal;
+                        ultimoSimbolo = cadena[cabezal];
+                    }
+                }
+
+                // Si encontramos un símbolo, eliminarlo
+                if (posicionUltimoEncontrado != -1)
+                {
+                    // Mover al símbolo a eliminar
+                    while (cabezal > posicionUltimoEncontrado)
+                    {
+                        moverIzquierda();
+                        AgregarMovimiento("I", cadena[cabezal].ToString());
+                        await Task.Delay(300);
+                    }
+
+                    // Eliminar el símbolo
+                    dgMT.Rows[0].Cells[cabezal].Value = blanco;
+                    cadena[cabezal] = 'Δ';
+                    AgregarMovimiento("", blanco);
+                    await Task.Delay(500);
+
+                    MessageBox.Show($"Se eliminó el símbolo '{ultimoSimbolo}' en posición {posicionUltimoEncontrado}",
+                        "Operación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró ningún símbolo diferente a Δ para eliminar.",
+                        "Operación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void btnInsertarMarcaInicial_Click(object sender, EventArgs e)
+        {
+            InsertarMarcaInicial();
+        }
+
+        private void btnRegresarMarca_Click(object sender, EventArgs e)
+        {
+            RegresarMarca();
         }
     }
 }
