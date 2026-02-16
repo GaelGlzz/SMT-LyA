@@ -38,6 +38,7 @@
             this.txtAlfabeto = new System.Windows.Forms.TextBox();
             this.lblAlfabeto = new System.Windows.Forms.Label();
             this.grpOperaciones = new System.Windows.Forms.GroupBox();
+            this.radMoverCelda = new System.Windows.Forms.RadioButton();
             this.btnSimbolo = new System.Windows.Forms.Button();
             this.btnEscribir = new System.Windows.Forms.Button();
             this.radEliminarXHastaExtremo = new System.Windows.Forms.RadioButton();
@@ -68,9 +69,10 @@
             this.lblMTC = new System.Windows.Forms.Label();
             this.dgMT = new System.Windows.Forms.DataGridView();
             this.grpMarca = new System.Windows.Forms.GroupBox();
-            this.btnInsertarMarcaInicial = new System.Windows.Forms.Button();
             this.btnRegresarMarca = new System.Windows.Forms.Button();
-            this.radMoverCelda = new System.Windows.Forms.RadioButton();
+            this.btnInsertarMarcaInicial = new System.Windows.Forms.Button();
+            this.radEliminarDesdePosicion = new System.Windows.Forms.RadioButton();
+            this.chkEliminarSimboloRecorrido = new System.Windows.Forms.CheckBox();
             this.grpDatos.SuspendLayout();
             this.grpOperaciones.SuspendLayout();
             this.grpCadena.SuspendLayout();
@@ -100,7 +102,7 @@
             // 
             // btnIniciarMT
             // 
-            this.btnIniciarMT.BackColor = System.Drawing.Color.OrangeRed;
+            this.btnIniciarMT.BackColor = System.Drawing.Color.Turquoise;
             this.btnIniciarMT.Location = new System.Drawing.Point(5, 275);
             this.btnIniciarMT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnIniciarMT.Name = "btnIniciarMT";
@@ -174,6 +176,7 @@
             // 
             // grpOperaciones
             // 
+            this.grpOperaciones.Controls.Add(this.radEliminarDesdePosicion);
             this.grpOperaciones.Controls.Add(this.radMoverCelda);
             this.grpOperaciones.Controls.Add(this.btnSimbolo);
             this.grpOperaciones.Controls.Add(this.btnEscribir);
@@ -199,6 +202,17 @@
             this.grpOperaciones.TabIndex = 1;
             this.grpOperaciones.TabStop = false;
             this.grpOperaciones.Text = "Operaciones";
+            // 
+            // radMoverCelda
+            // 
+            this.radMoverCelda.AutoSize = true;
+            this.radMoverCelda.Location = new System.Drawing.Point(19, 94);
+            this.radMoverCelda.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radMoverCelda.Name = "radMoverCelda";
+            this.radMoverCelda.Size = new System.Drawing.Size(143, 20);
+            this.radMoverCelda.TabIndex = 23;
+            this.radMoverCelda.Text = "Moverse una celda";
+            this.radMoverCelda.UseVisualStyleBackColor = true;
             // 
             // btnSimbolo
             // 
@@ -518,6 +532,7 @@
             // 
             // grpMarca
             // 
+            this.grpMarca.Controls.Add(this.chkEliminarSimboloRecorrido);
             this.grpMarca.Controls.Add(this.btnRegresarMarca);
             this.grpMarca.Controls.Add(this.btnInsertarMarcaInicial);
             this.grpMarca.Location = new System.Drawing.Point(655, 205);
@@ -526,17 +541,6 @@
             this.grpMarca.TabIndex = 4;
             this.grpMarca.TabStop = false;
             this.grpMarca.Text = "Marca inicial";
-            // 
-            // btnInsertarMarcaInicial
-            // 
-            this.btnInsertarMarcaInicial.Location = new System.Drawing.Point(13, 22);
-            this.btnInsertarMarcaInicial.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnInsertarMarcaInicial.Name = "btnInsertarMarcaInicial";
-            this.btnInsertarMarcaInicial.Size = new System.Drawing.Size(175, 35);
-            this.btnInsertarMarcaInicial.TabIndex = 15;
-            this.btnInsertarMarcaInicial.Text = "Insertar marca inicial";
-            this.btnInsertarMarcaInicial.UseVisualStyleBackColor = true;
-            this.btnInsertarMarcaInicial.Click += new System.EventHandler(this.btnInsertarMarcaInicial_Click);
             // 
             // btnRegresarMarca
             // 
@@ -549,16 +553,39 @@
             this.btnRegresarMarca.UseVisualStyleBackColor = true;
             this.btnRegresarMarca.Click += new System.EventHandler(this.btnRegresarMarca_Click);
             // 
-            // radMoverCelda
+            // btnInsertarMarcaInicial
             // 
-            this.radMoverCelda.AutoSize = true;
-            this.radMoverCelda.Location = new System.Drawing.Point(19, 94);
-            this.radMoverCelda.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.radMoverCelda.Name = "radMoverCelda";
-            this.radMoverCelda.Size = new System.Drawing.Size(143, 20);
-            this.radMoverCelda.TabIndex = 23;
-            this.radMoverCelda.Text = "Moverse una celda";
-            this.radMoverCelda.UseVisualStyleBackColor = true;
+            this.btnInsertarMarcaInicial.Location = new System.Drawing.Point(13, 22);
+            this.btnInsertarMarcaInicial.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnInsertarMarcaInicial.Name = "btnInsertarMarcaInicial";
+            this.btnInsertarMarcaInicial.Size = new System.Drawing.Size(175, 35);
+            this.btnInsertarMarcaInicial.TabIndex = 15;
+            this.btnInsertarMarcaInicial.Text = "Insertar marca inicial";
+            this.btnInsertarMarcaInicial.UseVisualStyleBackColor = true;
+            this.btnInsertarMarcaInicial.Click += new System.EventHandler(this.btnInsertarMarcaInicial_Click);
+            // 
+            // radEliminarDesdePosicion
+            // 
+            this.radEliminarDesdePosicion.AutoSize = true;
+            this.radEliminarDesdePosicion.Location = new System.Drawing.Point(247, 94);
+            this.radEliminarDesdePosicion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radEliminarDesdePosicion.Name = "radEliminarDesdePosicion";
+            this.radEliminarDesdePosicion.Size = new System.Drawing.Size(155, 36);
+            this.radEliminarDesdePosicion.TabIndex = 24;
+            this.radEliminarDesdePosicion.Text = "Eliminar todos desde\r\nla posición actual";
+            this.radEliminarDesdePosicion.UseVisualStyleBackColor = true;
+            this.radEliminarDesdePosicion.Visible = false;
+            // 
+            // chkEliminarSimboloRecorrido
+            // 
+            this.chkEliminarSimboloRecorrido.AutoSize = true;
+            this.chkEliminarSimboloRecorrido.Location = new System.Drawing.Point(29, 106);
+            this.chkEliminarSimboloRecorrido.Name = "chkEliminarSimboloRecorrido";
+            this.chkEliminarSimboloRecorrido.Size = new System.Drawing.Size(138, 36);
+            this.chkEliminarSimboloRecorrido.TabIndex = 17;
+            this.chkEliminarSimboloRecorrido.Text = "Eliminar símbolos \r\nen recorrido";
+            this.chkEliminarSimboloRecorrido.UseVisualStyleBackColor = true;
+            this.chkEliminarSimboloRecorrido.CheckedChanged += new System.EventHandler(this.chkEliminarSimboloRecorrido_CheckedChanged);
             // 
             // Form1
             // 
@@ -584,6 +611,7 @@
             this.grpMaquina.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgMT)).EndInit();
             this.grpMarca.ResumeLayout(false);
+            this.grpMarca.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -633,6 +661,8 @@
         private System.Windows.Forms.RadioButton radMoverCelda;
         private System.Windows.Forms.Button btnRegresarMarca;
         private System.Windows.Forms.Button btnInsertarMarcaInicial;
+        private System.Windows.Forms.RadioButton radEliminarDesdePosicion;
+        private System.Windows.Forms.CheckBox chkEliminarSimboloRecorrido;
     }
 }
 

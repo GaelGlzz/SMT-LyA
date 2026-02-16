@@ -60,6 +60,9 @@ namespace SimuladorMaquinaTuring
 
             // Estado inicial de los botones
             ActualizarEstadoBotones();
+            
+            // Desactivar chkEliminarSimboloRecorrido inicialmente
+            chkEliminarSimboloRecorrido.Enabled = false;
         }
 
         private void RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -569,6 +572,16 @@ namespace SimuladorMaquinaTuring
             {
                 if (cabezal < dgMT.Columns.Count - 1)
                 {
+                    // Si el checkbox está marcado, borrar la celda actual antes de mover
+                    if (chkEliminarSimboloRecorrido.Checked && 
+                        dgMT.Rows[0].Cells[cabezal].Value.ToString() != blanco && 
+                        dgMT.Rows[0].Cells[cabezal].Value.ToString() != "*")
+                    {
+                        dgMT.Rows[0].Cells[cabezal].Value = blanco;
+                        cadena[cabezal] = blanco[0];
+                        AgregarMovimiento("", blanco);
+                    }
+
                     moverDerecha();
                     AgregarMovimiento("D", cadena[cabezal].ToString());
                 }
@@ -582,6 +595,16 @@ namespace SimuladorMaquinaTuring
             {
                 if (cabezal > 0)
                 {
+                    // Si el checkbox está marcado, borrar la celda actual antes de mover
+                    if (chkEliminarSimboloRecorrido.Checked && 
+                        dgMT.Rows[0].Cells[cabezal].Value.ToString() != blanco && 
+                        dgMT.Rows[0].Cells[cabezal].Value.ToString() != "*")
+                    {
+                        dgMT.Rows[0].Cells[cabezal].Value = blanco;
+                        cadena[cabezal] = blanco[0];
+                        AgregarMovimiento("", blanco);
+                    }
+
                     moverIzquierda();
                     AgregarMovimiento("I", cadena[cabezal].ToString());
                 }
@@ -1036,9 +1059,18 @@ namespace SimuladorMaquinaTuring
             }
 
             if (encontrada)
-                MessageBox.Show($"Cadena \"{patron}\" encontrada en posición {cabezal}");
+            {
+                MessageBox.Show($"Cadena \"{patron}\" encontrada en posición {cabezal}\n\nESTADO DE ACEPTACIÓN", 
+                    "Búsqueda Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             else
-                MessageBox.Show($"Cadena \"{patron}\" no encontrada");
+            {
+                string estadoMsg = derecha ? 
+                    "Cadena no encontrada hacia la derecha\n\nPROBLEMA DE PARADA" : 
+                    "Cadena no encontrada hacia la izquierda\n\nTERMINACIÓN ANORMAL";
+                MessageBox.Show($"{estadoMsg}", "Búsqueda Fallida", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
 
@@ -1126,8 +1158,95 @@ namespace SimuladorMaquinaTuring
             dgMT.Rows[0].Cells[cabezal].Value = "*";
             cadena[cabezal] = '*';  
 
+            // Activar chkEliminarSimboloRecorrido
+            chkEliminarSimboloRecorrido.Enabled = true;
+
             MessageBox.Show($"Marca insertada en posición {posicionMarca}", "Marca insertada",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async Task EliminarDesdePosicion(bool derecha)
+        {
+            if (posicionMarca == -1)
+            {
+                MessageBox.Show("No hay marca establecida. Primero inserte una marca.", "Sin marca",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int cont = 0;
+
+            if (derecha)
+            {
+                // Eliminar desde la posición actual hacia la marca (derecha)
+                while (cabezal < posicionMarca)
+                {
+                    // Eliminar símbolo actual
+                    if (dgMT.Rows[0].Cells[cabezal].Value.ToString() != blanco && 
+                        dgMT.Rows[0].Cells[cabezal].Value.ToString() != "*")
+                    {
+                        dgMT.Rows[0].Cells[cabezal].Value = blanco;
+                        cadena[cabezal] = blanco[0];
+                        cont++;
+                        AgregarMovimiento("", blanco);
+                    }
+
+                    // Mover hacia la derecha
+                    if (cabezal < posicionMarca)
+                    {
+                        moverDerecha();
+                        AgregarMovimiento("D", cadena[cabezal].ToString());
+                    }
+
+                    await Task.Delay(500);
+                }
+            }
+            else
+            {
+                // Eliminar desde la posición actual hacia la marca (izquierda)
+                while (cabezal > posicionMarca)
+                {
+                    // Eliminar símbolo actual
+                    if (dgMT.Rows[0].Cells[cabezal].Value.ToString() != blanco && 
+                        dgMT.Rows[0].Cells[cabezal].Value.ToString() != "*")
+                    {
+                        dgMT.Rows[0].Cells[cabezal].Value = blanco;
+                        cadena[cabezal] = blanco[0];
+                        cont++;
+                        AgregarMovimiento("", blanco);
+                    }
+
+                    // Mover hacia la izquierda
+                    if (cabezal > posicionMarca)
+                    {
+                        moverIzquierda();
+                        AgregarMovimiento("I", cadena[cabezal].ToString());
+                    }
+
+                    await Task.Delay(500);
+                }
+            }
+
+            // Regresar a la marca
+            bool irDerecha = cabezal < posicionMarca;
+
+            while (cabezal != posicionMarca)
+            {
+                if (irDerecha)
+                {
+                    moverDerecha();
+                    AgregarMovimiento("D", cadena[cabezal].ToString());
+                }
+                else
+                {
+                    moverIzquierda();
+                    AgregarMovimiento("I", cadena[cabezal].ToString());
+                }
+                await Task.Delay(500);
+            }
+
+            MessageBox.Show($"Se eliminaron {cont} símbolo(s) entre la posición actual y la marca.\nRegresado a la marca en posición {posicionMarca}",
+                "Operación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async void RegresarMarca()
@@ -1338,6 +1457,11 @@ namespace SimuladorMaquinaTuring
         private void btnRegresarMarca_Click(object sender, EventArgs e)
         {
             RegresarMarca();
+        }
+
+        private void chkEliminarSimboloRecorrido_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
